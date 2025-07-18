@@ -214,79 +214,200 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-20 px-4">
-      <h2 className="text-4xl font-bold text-center text-cyan-400 mb-10 tracking-tight">
-        ⚠️ Real-Time Scam Reports
-      </h2>
-
-      {/* Chart */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 mb-12">
-        <Bar data={chartData} options={chartOptions} />
+    <div className="max-w-7xl mx-auto py-8 px-4 space-y-8">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
+          🛡️ PhishGuard Dashboard
+        </h1>
+        <p className="text-zinc-400 text-lg">Real-time monitoring of phishing and scam reports</p>
       </div>
 
-      {/* Reports */}
-      <div className="grid gap-6">
-        {reports.map((r) => (
-          <div
-            key={r.id}
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-md hover:shadow-cyan-500/20 transition-all duration-200 transform hover:scale-[1.01]"
-          >
-            {/* URL */}
-            <div className="flex items-center gap-2 text-cyan-400 font-semibold mb-2">
-              <Globe2 className="w-4 h-4" />
-              <span className="truncate">{r.url}</span>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 border border-cyan-500/20 rounded-xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-cyan-400 text-sm font-medium">Total Reports</p>
+              <p className="text-3xl font-bold text-white">{analytics.totalReports}</p>
             </div>
-
-            {/* Reporter Email */}
-            <div className="flex items-center gap-2 text-zinc-300 mb-1">
-              <User2 className="w-4 h-4 text-cyan-500" />
-              <span>{r.reporterEmail || 'Anonymous'}</span>
-            </div>
-
-            {/* Date */}
-            <div className="flex items-center gap-2 text-zinc-400 text-sm mb-1">
-              <CalendarDays className="w-4 h-4 text-cyan-500" />
-              <span>
-                {r.createdAt?.toDate
-                  ? new Date(r.createdAt.toDate()).toLocaleString()
-                  : 'Unknown'}
-              </span>
-            </div>
-
-            {/* Scam Type */}
-            {r.scamType && (
-              <div className="flex items-center gap-2 text-orange-400 text-sm mb-1">
-                <AlertCircle className="w-4 h-4" />
-                <span>{r.scamType}</span>
-              </div>
-            )}
-
-            {/* Description */}
-            {r.description && (
-              <div className="mt-2 text-zinc-300 text-sm">
-                <p className="italic">“{r.description}”</p>
-              </div>
-            )}
-
-            {/* Image Preview */}
-            {r.imageUrl && (
-              <div className="mt-4">
-                <img
-                  src={r.imageUrl}
-                  alt="Reported screenshot"
-                  className="w-full max-h-64 object-cover rounded border border-zinc-800 shadow"
-                />
-              </div>
-            )}
+            <Shield className="w-8 h-8 text-cyan-400" />
           </div>
-        ))}
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-orange-400 text-sm font-medium">This Week</p>
+              <p className="text-3xl font-bold text-white">{analytics.recentReports}</p>
+            </div>
+            <TrendingUp className="w-8 h-8 text-orange-400" />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-green-400 text-sm font-medium">Top Scam Type</p>
+              <p className="text-lg font-bold text-white truncate">{analytics.topScamType}</p>
+            </div>
+            <Activity className="w-8 h-8 text-green-400" />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-xl p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-purple-400 text-sm font-medium">Unique Types</p>
+              <p className="text-3xl font-bold text-white">{Object.keys(analytics.scamTypeCounts).length}</p>
+            </div>
+            <AlertCircle className="w-8 h-8 text-purple-400" />
+          </div>
+        </div>
       </div>
 
-      {reports.length === 0 && (
-        <p className="text-center text-zinc-500 mt-10 animate-pulse">
-          No scam reports yet... you're safe for now 🛡️
-        </p>
-      )}
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
+          <h3 className="text-xl font-semibold text-white mb-4">Reports by Scam Type</h3>
+          <div className="h-80">
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+        </div>
+
+        <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
+          <h3 className="text-xl font-semibold text-white mb-4">Distribution</h3>
+          <div className="h-80">
+            <Doughnut data={doughnutData} options={doughnutOptions} />
+          </div>
+        </div>
+      </div>
+
+      {/* Filters and Search */}
+      <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 w-4 h-4 text-zinc-400" />
+            <input
+              type="text"
+              placeholder="Search reports..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-400 focus:outline-none focus:border-cyan-500 transition-colors"
+            />
+          </div>
+          
+          <div className="relative">
+            <Filter className="absolute left-3 top-3 w-4 h-4 text-zinc-400" />
+            <select
+              value={selectedFilter}
+              onChange={(e) => setSelectedFilter(e.target.value)}
+              className="pl-10 pr-8 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition-colors appearance-none"
+            >
+              {uniqueScamTypes.map(type => (
+                <option key={type} value={type}>
+                  {type === 'all' ? 'All Types' : type}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors">
+            <Download className="w-4 h-4" />
+            Export
+          </button>
+        </div>
+
+        {/* Reports List */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-white">
+            Recent Reports ({filteredReports.length})
+          </h3>
+          
+          {filteredReports.length === 0 ? (
+            <div className="text-center py-12">
+              <Shield className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
+              <p className="text-zinc-500 text-lg">
+                {reports.length === 0 
+                  ? "No scam reports yet... you're safe for now 🛡️"
+                  : "No reports match your current filters"
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {filteredReports.map((report) => (
+                <div
+                  key={report.id}
+                  className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-6 hover:border-cyan-500/30 transition-all duration-200 hover:shadow-lg hover:shadow-cyan-500/10"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+                    <div className="flex-1 space-y-3">
+                      {/* URL */}
+                      <div className="flex items-center gap-2">
+                        <Globe2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                        <span className="text-cyan-400 font-medium break-all">{report.url}</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        {/* Reporter */}
+                        <div className="flex items-center gap-2 text-zinc-300">
+                          <User2 className="w-4 h-4 text-zinc-500" />
+                          <span>{report.reporterEmail || 'Anonymous'}</span>
+                        </div>
+
+                        {/* Date */}
+                        <div className="flex items-center gap-2 text-zinc-400">
+                          <CalendarDays className="w-4 h-4 text-zinc-500" />
+                          <span>
+                            {report.createdAt?.toDate
+                              ? new Date(report.createdAt.toDate()).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })
+                              : 'Unknown'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Scam Type */}
+                      {report.scamType && (
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 text-orange-400" />
+                          <span className="bg-orange-500/20 text-orange-300 px-2 py-1 rounded-full text-xs font-medium">
+                            {report.scamType}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Description */}
+                      {report.description && (
+                        <div className="text-zinc-300 text-sm bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+                          <p className="italic">&quot;{report.description}&quot;</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Image Preview */}
+                    {report.imageUrl && (
+                      <div className="lg:w-48 flex-shrink-0">
+                        <img
+                          src={report.imageUrl}
+                          alt="Reported screenshot"
+                          className="w-full h-32 lg:h-24 object-cover rounded-lg border border-zinc-700 shadow-lg"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
