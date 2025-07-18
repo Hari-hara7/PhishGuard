@@ -217,8 +217,8 @@ export default function DashboardPage() {
     <div className="max-w-7xl mx-auto py-8 px-4 space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
-          🛡️ PhishGuard Dashboard
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
+           PhishGuard Dashboard
         </h1>
         <p className="text-zinc-400 text-lg">Real-time monitoring of phishing and scam reports</p>
       </div>
