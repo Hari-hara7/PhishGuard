@@ -142,7 +142,7 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-cyan-400" />
                 <span className="text-sm sm:text-base">
-                  Join <span className="text-cyan-400 font-semibold">10,000+</span> users
+                  Join <span className="text-cyan-400 font-semibold">10+</span> users
                 </span>
               </div>
               <div className="hidden sm:block w-1 h-1 bg-zinc-600 rounded-full"></div>
