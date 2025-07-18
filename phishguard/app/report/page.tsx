@@ -56,7 +56,7 @@ export default function ReportPage() {
       <h2 className="text-4xl font-bold text-center text-cyan-400 mb-8">Report a Scam</h2>
 
       <div className="space-y-6">
-        {/* URL */}
+      
         <div>
           <label className="block mb-2 text-sm font-medium">Scam URL</label>
           <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Email */}
+        
         <div>
           <label className="block mb-2 text-sm font-medium">Your Email (optional)</label>
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Scam Type */}
+       
         <div>
           <label className="block mb-2 text-sm font-medium">Scam Type</label>
           <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Description */}
+       
         <div>
           <label className="block mb-2 text-sm font-medium">Details / Description</label>
           <div className="flex items-start gap-2">
@@ -122,7 +122,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Screenshot Proof */}
+       
         <div>
           <label className="block mb-2 text-sm font-medium">Proof or Screenshot Link (optional)</label>
           <div className="flex items-center gap-2">
@@ -137,7 +137,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Submit Button */}
+        
         <button
           onClick={handleSubmit}
           className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-black font-semibold rounded-md shadow-md transition"
