@@ -2,23 +2,19 @@
 
 import { ShieldCheck, Bug, UploadCloud, Globe2, Download } from 'lucide-react'
 import Link from 'next/link'
-import { Globe } from '@/components/magicui/globe'
+
 import { Badge } from '@/components/ui/badge'
 
 export default function HomePage() {
   return (
     <main className="relative min-h-screen bg-gradient-to-b from-black to-zinc-900 text-zinc-100 px-6 py-16 overflow-hidden">
       {/* Decorative Globe Animation */}
-      <div className="absolute inset-0 -z-10 opacity-30 pointer-events-none">
-        <Globe />
-      </div>
+   
 
       {/* Hero Section */}
       <section className="relative text-center max-w-4xl mx-auto space-y-8 mb-24 z-10">
         {/* Animated Globe in Background */}
-        <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none mt-20">
-          <Globe />
-        </div>
+      
 
         {/* Badge */}
         <div className="flex justify-center">
@@ -96,6 +92,8 @@ export default function HomePage() {
         >
           Launch Scanner
         </Link>
+
+         
       </section>
     </main>
   )
