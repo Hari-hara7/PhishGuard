@@ -219,265 +219,271 @@ export default function ScannerPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
-          🛡️ Advanced Phishing Scanner
-        </h1>
-        <p className="text-zinc-400 text-lg">AI-powered analysis to detect phishing emails and malicious URLs</p>
-      </div>
+    <div className="min-h-screen bg-black">
+      <div className="max-w-7xl mx-auto py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
+             Advanced Phishing Scanner
+          </h1>
+          <p className="text-zinc-400 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto px-2">
+            AI-powered analysis to detect phishing emails and malicious URLs
+          </p>
+        </div>
 
-      {/* Main Scanner Card */}
-      <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Input Section */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
-              <Zap className="w-6 h-6 text-cyan-400" />
-              Quick Scan
-            </h2>
+        {/* Main Scanner Card */}
+        <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-4 sm:p-6 lg:p-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+            {/* Input Section */}
+            <div className="space-y-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white flex items-center gap-2">
+                <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
+                Quick Scan
+              </h2>
 
-            <div className="space-y-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 text-cyan-400 w-5 h-5" />
-                <input
-                  type="email"
-                  placeholder="Sender's email (e.g., support@bank.com)"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:border-cyan-500 transition-colors placeholder-zinc-400"
-                />
+              <div className="space-y-4">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 text-cyan-400 w-4 h-4 sm:w-5 sm:h-5" />
+                  <input
+                    type="email"
+                    placeholder="Sender's email (e.g., support@bank.com)"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-10 sm:pl-11 pr-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-lg bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 transition-all placeholder-zinc-400"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Globe className="absolute left-3 top-3 text-cyan-400 w-4 h-4 sm:w-5 sm:h-5" />
+                  <input
+                    type="text"
+                    placeholder="Suspicious URL (e.g., https://secure-bank-update.com)"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    className="w-full pl-10 sm:pl-11 pr-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-lg bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 transition-all placeholder-zinc-400"
+                  />
+                </div>
+
+                <button
+                  onClick={handleScan}
+                  disabled={isScanning || !url || !email}
+                  className="w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:transform-none"
+                >
+                  {isScanning ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span className="hidden sm:inline">Analyzing...</span>
+                      <span className="sm:hidden">Scanning...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="hidden sm:inline">Scan for Threats</span>
+                      <span className="sm:hidden">Scan</span>
+                    </>
+                  )}
+                </button>
               </div>
 
-              <div className="relative">
-                <Globe className="absolute left-3 top-3 text-cyan-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Suspicious URL (e.g., https://secure-bank-update.com)"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:border-cyan-500 transition-colors placeholder-zinc-400"
-                />
+              {/* Security Tips */}
+              <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                <h3 className="text-white font-medium mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  <Info className="w-4 h-4 text-blue-400" />
+                  Security Tips
+                </h3>
+                <ul className="text-zinc-300 text-xs sm:text-sm space-y-1.5">
+                  <li>• Always verify sender identity independently</li>
+                  <li>• Check for HTTPS encryption in URLs</li>
+                  <li>• Be wary of urgent or threatening language</li>
+                  <li>• Never enter passwords on suspicious sites</li>
+                </ul>
               </div>
-
-              <button
-                onClick={handleScan}
-                disabled={isScanning || !url || !email}
-                className="w-full px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
-              >
-                {isScanning ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Shield className="w-5 h-5" />
-                    Scan for Threats
-                  </>
-                )}
-              </button>
             </div>
 
-            {/* Security Tips */}
-            <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-              <h3 className="text-white font-medium mb-2 flex items-center gap-2">
-                <Info className="w-4 h-4 text-blue-400" />
-                Security Tips
-              </h3>
-              <ul className="text-zinc-300 text-sm space-y-1">
-                <li>• Always verify sender identity independently</li>
-                <li>• Check for HTTPS encryption in URLs</li>
-                <li>• Be wary of urgent or threatening language</li>
-                <li>• Never enter passwords on suspicious sites</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Results Section */}
-          <div className="space-y-6">
-            {scanResult ? (
-              <>
-                <div className="text-center">
-                  <div className={`inline-flex items-center gap-3 p-4 rounded-lg border ${
-                    scanResult.overall === 'dangerous' 
-                      ? 'bg-red-500/10 border-red-500/30' 
-                      : scanResult.overall === 'suspicious'
-                      ? 'bg-yellow-500/10 border-yellow-500/30'
-                      : 'bg-green-500/10 border-green-500/30'
-                  }`}>
-                    <div className={getRiskColor(scanResult.overall)}>
-                      {getRiskIcon(scanResult.overall)}
-                    </div>
-                    <div>
-                      <div className={`font-semibold text-lg ${getRiskColor(scanResult.overall)}`}>
-                        {scanResult.overall.toUpperCase()}
+            {/* Results Section */}
+            <div className="space-y-6">
+              {scanResult ? (
+                <>
+                  <div className="text-center">
+                    <div className={`inline-flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border ${
+                      scanResult.overall === 'dangerous' 
+                        ? 'bg-red-500/10 border-red-500/30' 
+                        : scanResult.overall === 'suspicious'
+                        ? 'bg-yellow-500/10 border-yellow-500/30'
+                        : 'bg-green-500/10 border-green-500/30'
+                    }`}>
+                      <div className={getRiskColor(scanResult.overall)}>
+                        {getRiskIcon(scanResult.overall)}
                       </div>
-                      <div className="text-zinc-400 text-sm">
-                        Risk Score: {scanResult.score}/100
+                      <div className="text-left">
+                        <div className={`font-semibold text-base sm:text-lg ${getRiskColor(scanResult.overall)}`}>
+                          {scanResult.overall.toUpperCase()}
+                        </div>
+                        <div className="text-zinc-400 text-xs sm:text-sm">
+                          Risk Score: {scanResult.score}/100
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Detailed Analysis */}
-                <div className="space-y-4">
-                  <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                    <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-cyan-400" />
-                      URL Analysis
-                    </h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        {scanResult.urlAnalysis.hasHttps ? (
-                          <Lock className="w-4 h-4 text-green-400" />
-                        ) : (
-                          <Unlock className="w-4 h-4 text-red-400" />
+                  {/* Detailed Analysis */}
+                  <div className="space-y-4">
+                    <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                      <h3 className="text-white font-medium mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <Globe className="w-4 h-4 text-cyan-400" />
+                        URL Analysis
+                      </h3>
+                      <div className="space-y-2 text-xs sm:text-sm">
+                        <div className="flex items-center gap-2">
+                          {scanResult.urlAnalysis.hasHttps ? (
+                            <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 flex-shrink-0" />
+                          ) : (
+                            <Unlock className="w-3 h-3 sm:w-4 sm:h-4 text-red-400 flex-shrink-0" />
+                          )}
+                          <span className="text-zinc-300">
+                            {scanResult.urlAnalysis.hasHttps ? 'HTTPS Secured' : 'No HTTPS encryption'}
+                          </span>
+                        </div>
+                        {scanResult.urlAnalysis.suspiciousKeywords.length > 0 && (
+                          <div className="text-orange-300 break-words">
+                            <span className="font-medium">Suspicious keywords:</span> {scanResult.urlAnalysis.suspiciousKeywords.join(', ')}
+                          </div>
                         )}
-                        <span className="text-zinc-300">
-                          {scanResult.urlAnalysis.hasHttps ? 'HTTPS Secured' : 'No HTTPS encryption'}
-                        </span>
                       </div>
-                      {scanResult.urlAnalysis.suspiciousKeywords.length > 0 && (
-                        <div className="text-orange-300">
-                          Suspicious keywords: {scanResult.urlAnalysis.suspiciousKeywords.join(', ')}
+                    </div>
+
+                    <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                      <h3 className="text-white font-medium mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <Mail className="w-4 h-4 text-cyan-400" />
+                        Email Analysis
+                      </h3>
+                      <div className="space-y-2 text-xs sm:text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                            scanResult.emailAnalysis.domainReputation === 'good' ? 'bg-green-400' :
+                            scanResult.emailAnalysis.domainReputation === 'bad' ? 'bg-red-400' : 'bg-yellow-400'
+                          }`}></div>
+                          <span className="text-zinc-300">
+                            Domain reputation: {scanResult.emailAnalysis.domainReputation}
+                          </span>
                         </div>
-                      )}
+                        {scanResult.emailAnalysis.isTyposquatting && (
+                          <div className="text-red-300">⚠️ Possible typosquatting detected</div>
+                        )}
+                        {scanResult.emailAnalysis.suspiciousPatterns.length > 0 && (
+                          <div className="text-orange-300 break-words">
+                            <span className="font-medium">Suspicious patterns:</span> {scanResult.emailAnalysis.suspiciousPatterns.join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                      <h3 className="text-white font-medium mb-3 text-sm sm:text-base">Recommendations</h3>
+                      <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-300">
+                        {scanResult.recommendations.map((rec, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <span className="text-cyan-400 mt-1 flex-shrink-0">•</span>
+                            <span className="break-words">{rec}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-
-                  <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                    <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-cyan-400" />
-                      Email Analysis
-                    </h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${
-                          scanResult.emailAnalysis.domainReputation === 'good' ? 'bg-green-400' :
-                          scanResult.emailAnalysis.domainReputation === 'bad' ? 'bg-red-400' : 'bg-yellow-400'
-                        }`}></div>
-                        <span className="text-zinc-300">
-                          Domain reputation: {scanResult.emailAnalysis.domainReputation}
-                        </span>
-                      </div>
-                      {scanResult.emailAnalysis.isTyposquatting && (
-                        <div className="text-red-300">⚠️ Possible typosquatting detected</div>
-                      )}
-                      {scanResult.emailAnalysis.suspiciousPatterns.length > 0 && (
-                        <div className="text-orange-300">
-                          Suspicious patterns: {scanResult.emailAnalysis.suspiciousPatterns.join(', ')}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                    <h3 className="text-white font-medium mb-3">Recommendations</h3>
-                    <ul className="space-y-1 text-sm text-zinc-300">
-                      {scanResult.recommendations.map((rec, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <span className="text-cyan-400 mt-1">•</span>
-                          {rec}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8 sm:py-12">
+                  <Shield className="w-12 h-12 sm:w-16 sm:h-16 text-zinc-600 mx-auto mb-4" />
+                  <p className="text-zinc-500 text-sm sm:text-base">Enter email and URL to start scanning</p>
                 </div>
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <Shield className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
-                <p className="text-zinc-500">Enter email and URL to start scanning</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Scan History */}
-      {scanHistory.length > 0 && (
-        <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <History className="w-5 h-5 text-cyan-400" />
-            Recent Scans
-          </h2>
-          <div className="space-y-3">
-            {scanHistory.map((scan, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
-                <div className="flex items-center gap-3">
-                  <div className={getRiskColor(scan.result.overall)}>
-                    {getRiskIcon(scan.result.overall)}
+        {/* Scan History */}
+        {scanHistory.length > 0 && (
+          <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <History className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+              Recent Scans
+            </h2>
+            <div className="space-y-3">
+              {scanHistory.map((scan, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-zinc-700 gap-3">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className={`${getRiskColor(scan.result.overall)} flex-shrink-0`}>
+                      {getRiskIcon(scan.result.overall)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-white text-xs sm:text-sm font-medium truncate">
+                        {scan.url}
+                      </div>
+                      <div className="text-zinc-400 text-xs">
+                        {scan.timestamp.toLocaleTimeString()}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-white text-sm font-medium truncate max-w-xs">
-                      {scan.url}
-                    </div>
-                    <div className="text-zinc-400 text-xs">
-                      {scan.timestamp.toLocaleTimeString()}
-                    </div>
+                  <div className={`text-xs font-medium ${getRiskColor(scan.result.overall)} flex-shrink-0`}>
+                    {scan.result.score}/100
                   </div>
                 </div>
-                <div className={`text-xs font-medium ${getRiskColor(scan.result.overall)}`}>
-                  {scan.result.score}/100
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Educational Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <Eye className="w-5 h-5 text-cyan-400" />
-            Common Phishing Signs
-          </h3>
-          <ul className="space-y-2 text-zinc-300 text-sm">
-            <li className="flex items-start gap-2">
-              <span className="text-red-400 mt-1">•</span>
-              Urgent or threatening language
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-red-400 mt-1">•</span>
-              Requests for personal information
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-red-400 mt-1">•</span>
-              Suspicious sender addresses
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-red-400 mt-1">•</span>
-              Poor grammar or spelling
-            </li>
-          </ul>
-        </div>
+        {/* Educational Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+              Common Phishing Signs
+            </h3>
+            <ul className="space-y-2 text-zinc-300 text-xs sm:text-sm">
+              <li className="flex items-start gap-2">
+                <span className="text-red-400 mt-1 flex-shrink-0">•</span>
+                <span>Urgent or threatening language</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-red-400 mt-1 flex-shrink-0">•</span>
+                <span>Requests for personal information</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-red-400 mt-1 flex-shrink-0">•</span>
+                <span>Suspicious sender addresses</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-red-400 mt-1 flex-shrink-0">•</span>
+                <span>Poor grammar or spelling</span>
+              </li>
+            </ul>
+          </div>
 
-        <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-cyan-400" />
-            Stay Protected
-          </h3>
-          <ul className="space-y-2 text-zinc-300 text-sm">
-            <li className="flex items-start gap-2">
-              <span className="text-green-400 mt-1">•</span>
-              Verify sender through other channels
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-green-400 mt-1">•</span>
-              Check URLs before clicking
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-green-400 mt-1">•</span>
-              Use two-factor authentication
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-green-400 mt-1">•</span>
-              Keep software updated
-            </li>
-          </ul>
+          <div className="bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+              Stay Protected
+            </h3>
+            <ul className="space-y-2 text-zinc-300 text-xs sm:text-sm">
+              <li className="flex items-start gap-2">
+                <span className="text-green-400 mt-1 flex-shrink-0">•</span>
+                <span>Verify sender through other channels</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-400 mt-1 flex-shrink-0">•</span>
+                <span>Check URLs before clicking</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-400 mt-1 flex-shrink-0">•</span>
+                <span>Use two-factor authentication</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-400 mt-1 flex-shrink-0">•</span>
+                <span>Keep software updated</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
