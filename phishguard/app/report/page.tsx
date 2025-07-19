@@ -207,12 +207,7 @@ export default function ReportPage() {
                 <option value="Phishing">🎣 Phishing (Fake login pages)</option>
                 <option value="Fake Tech Support">💻 Fake Tech Support</option>
                 <option value="Financial Scam">💰 Financial Scam</option>
-                <option value="Crypto Scam">₿ Crypto Scam</option>
-                <option value="Romance Scam">💕 Romance Scam</option>
-                <option value="Shopping Scam">🛒 Shopping Scam</option>
-                <option value="Impersonation">👤 Impersonation</option>
-                <option value="Malware">🦠 Malware/Virus</option>
-                <option value="Other">🔍 Other</option>
+          
               </select>
               {errors.scamType && (
                 <p className="text-red-400 text-sm flex items-center gap-1">
