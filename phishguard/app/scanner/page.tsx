@@ -365,7 +365,7 @@ export default function ScannerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-zinc-900 to-slate-800">
+    <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="text-center">
