@@ -206,100 +206,136 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
+        {/* Advanced Features Section */}
+        <section className="py-12 sm:py-16 lg:py-20 xl:py-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">
-                Advanced Protection Features
+            <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-6 sm:mb-8 shadow-lg shadow-cyan-500/30">
+                <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4 sm:mb-6">
+                Enterprise-Grade Security Features
               </h2>
-              <p className="text-lg sm:text-xl text-zinc-400 max-w-3xl mx-auto">
-                Comprehensive security solutions designed to keep you safe from evolving online threats
+              <p className="text-base sm:text-lg lg:text-xl text-zinc-400 max-w-xs sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto leading-relaxed">
+                Comprehensive cybersecurity solutions powered by cutting-edge AI technology and machine learning algorithms
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-6 lg:p-8 rounded-2xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2">
-                <div className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <ShieldCheck className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold mb-4 text-white group-hover:text-cyan-400 transition-colors">
-                  Real-Time Detection
-                </h3>
-                <p className="text-zinc-400 leading-relaxed">
-                  Instantly detect phishing URLs using advanced AI-powered scanning, machine learning algorithms, and comprehensive URL intelligence databases.
-                </p>
-                <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium">
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  99.9% accuracy rate
-                </div>
-              </div>
-
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-6 lg:p-8 rounded-2xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2">
-                <div className="w-14 h-14 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Bug className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold mb-4 text-white group-hover:text-cyan-400 transition-colors">
-                  Malware Protection
-                </h3>
-                <p className="text-zinc-400 leading-relaxed">
-                  Receive instant alerts for links hosting malware, spyware, ransomware, or harmful scripts before they can compromise your system.
-                </p>
-                <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium">
-                  <Clock className="w-4 h-4 mr-2" />
-                  Sub-second response time
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+              {/* Real-Time Detection */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-500/30">
+                    <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-cyan-400 transition-colors">
+                    Real-Time Detection
+                  </h3>
+                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                    Advanced AI algorithms analyze URLs instantly using machine learning patterns and threat intelligence databases.
+                  </p>
+                  <div className="flex items-center text-cyan-400 text-xs sm:text-sm font-medium">
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                    99.9% accuracy rate
+                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                  </div>
                 </div>
               </div>
 
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-6 lg:p-8 rounded-2xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
-                <div className="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Globe2 className="w-7 h-7 text-white" />
+              {/* Malware Protection */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-red-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-400/10 transform hover:-translate-y-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-red-500/30">
+                    <Bug className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-red-400 transition-colors">
+                    Malware Protection
+                  </h3>
+                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                    Proactive defense against malware, ransomware, and malicious scripts with behavioral analysis.
+                  </p>
+                  <div className="flex items-center text-red-400 text-xs sm:text-sm font-medium">
+                    <Lock className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                    Enterprise-grade protection
+                    <Database className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                  </div>
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold mb-4 text-white group-hover:text-cyan-400 transition-colors">
-                  Global Coverage
-                </h3>
-                <p className="text-zinc-400 leading-relaxed">
-                  Comprehensive URL scanning across all regions, languages, and domains. Stay protected worldwide with our international threat database.
-                </p>
-                <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  200+ countries covered
+              </div>
+
+              {/* Global Coverage */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-400/10 transform hover:-translate-y-2 relative overflow-hidden sm:col-span-2 lg:col-span-1">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
+                    <Globe2 className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-400 transition-colors">
+                    Global Threat Intelligence
+                  </h3>
+                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                    Worldwide threat monitoring with real-time updates from our global security network.
+                  </p>
+                  <div className="flex items-center text-purple-400 text-xs sm:text-sm font-medium">
+                    <Wifi className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                    200+ countries monitored
+                    <Command className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 backdrop-blur-sm border-y border-zinc-700/50">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-8">
-              <Award className="w-8 h-8 text-white" />
+        {/* Enhanced CTA Section */}
+        <section className="py-12 sm:py-16 lg:py-20 xl:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-cyan-900/20 via-blue-900/20 to-purple-900/20 backdrop-blur-sm border-y border-zinc-700/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.1)_0%,transparent_70%)]"></div>
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-6 sm:mb-8 lg:mb-10 shadow-lg shadow-cyan-500/30 animate-pulse">
+              <Award className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-white" />
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                Stay Safe. Stay Ahead.
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 lg:mb-8">
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Secure Your Digital Life Today
               </span>
             </h2>
-            <p className="text-lg sm:text-xl text-zinc-300 mb-8 leading-relaxed">
-              Join thousands of users protecting themselves from scams every day. 
-              Start your journey to safer browsing today.
+            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-zinc-300 mb-6 sm:mb-8 lg:mb-10 leading-relaxed max-w-4xl mx-auto">
+              Join thousands of security-conscious users who trust PhishGuard to protect their online activities. 
+              Experience next-generation cybersecurity protection.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 lg:gap-6 max-w-2xl mx-auto">
               <Link
                 href="/scanner"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
               >
-                <Scan className="w-5 h-5 group-hover:animate-spin" />
-                Launch Scanner Now
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <Scan className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-spin" />
+                Launch Security Scanner
+                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/dashboard"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-zinc-600 text-zinc-300 hover:border-cyan-400 hover:text-cyan-400 font-semibold rounded-xl transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 border-2 border-zinc-600 text-zinc-300 hover:border-cyan-400 hover:text-cyan-400 hover:bg-cyan-400/5 font-semibold rounded-xl lg:rounded-2xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
               >
-                View Dashboard
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-bounce" />
+                Security Dashboard
               </Link>
+            </div>
+            
+            {/* Additional Trust Indicators */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12 lg:mt-16 max-w-4xl mx-auto">
+              <div className="flex items-center justify-center space-x-2 sm:space-x-3 bg-zinc-800/30 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 hover:border-green-400/30 transition-all duration-300">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
+                <span className="text-zinc-300 text-xs sm:text-sm font-medium">SSL Secure</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 sm:space-x-3 bg-zinc-800/30 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 hover:border-blue-400/30 transition-all duration-300">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                <span className="text-zinc-300 text-xs sm:text-sm font-medium">Privacy Protected</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 sm:space-x-3 bg-zinc-800/30 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 hover:border-purple-400/30 transition-all duration-300 sm:col-span-3 lg:col-span-1">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                <span className="text-zinc-300 text-xs sm:text-sm font-medium">24/7 Support</span>
+              </div>
             </div>
           </div>
         </section>
