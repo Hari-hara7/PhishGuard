@@ -139,29 +139,29 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-18">
 
-<div className="flex-1 flex justify-end md:justify-end lg:justify-end xl:justify-end">
-  <Link
-    href="/"
-    className="flex items-center gap-3 text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent hover:from-cyan-300 hover:via-blue-300 hover:to-purple-300 transition-all duration-500 group mr-4"
-  >
-    <div className="relative p-1">
-      <ShieldCheck className="w-7 h-7 md:w-8 md:h-8 text-cyan-400 group-hover:text-cyan-300 transition-all duration-300 group-hover:rotate-12" />
-      <Sparkles className="w-3 h-3 text-cyan-300 absolute -top-0.5 -right-0.5 animate-pulse group-hover:animate-bounce" />
-      <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    </div>
-    <span className="hidden sm:inline">PhishGuard</span>
-    <span className="sm:hidden">PhishGuard</span>
-  </Link>
-</div>
+          {/* Logo - Mobile & Desktop */}
+          <div className="flex-shrink-0">
+            <Link
+              href="/"
+              className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent hover:from-cyan-300 hover:via-blue-300 hover:to-purple-300 transition-all duration-500 group"
+            >
+              <div className="relative p-1">
+                <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-cyan-400 group-hover:text-cyan-300 transition-all duration-300 group-hover:rotate-12" />
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300 absolute -top-0.5 -right-0.5 animate-pulse group-hover:animate-bounce" />
+                <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+              <span className=" min-[480px]:inline text-base sm:text-lg md:text-xl lg:text-2xl">PhishGuard</span>
+            </Link>
+          </div>
 
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1 flex-1 justify-center">
             <NavLinks />
           </div>
 
           {/* User Section - Desktop */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 flex-shrink-0">
             {user ? (
               <div className="flex items-center space-x-3">
                 {/* User Profile Menu */}
@@ -253,15 +253,15 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex-shrink-0">
             <Sheet>
               <SheetTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="text-white hover:bg-slate-800/60 hover:text-cyan-400 transition-all duration-300 rounded-xl border border-transparent hover:border-slate-600/50"
+                  className="text-white hover:bg-slate-800/60 hover:text-cyan-400 transition-all duration-300 rounded-xl border border-transparent hover:border-slate-600/50 w-10 h-10"
                 >
-                  <Menu className="w-6 h-6" />
+                  <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white border-slate-600/50 w-80 md:w-96">
