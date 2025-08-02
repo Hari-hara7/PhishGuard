@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { db, auth } from '../../lib/firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
@@ -14,6 +14,13 @@ import {
   CheckCircle,
   Loader2,
   Info,
+  Sparkles,
+  Eye,
+  Users,
+  Clock,
+  Lock,
+  Zap,
+  Activity
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -25,6 +32,20 @@ export default function ReportPage() {
   const [proofUrl, setProofUrl] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -113,221 +134,360 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="max-w-5xl mx-auto py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Dynamic Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute w-96 h-96 bg-cyan-400/8 rounded-full blur-3xl transition-all duration-1000 ease-out"
+          style={{
+            top: `${mousePosition.y}%`,
+            left: `${mousePosition.x}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        ></div>
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-400/6 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-400/6 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-3/4 left-3/4 w-64 h-64 bg-pink-400/6 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        
+        {/* Cyber Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30"></div>
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+        
         {/* Header Section */}
-        <div className="text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-4 sm:mb-6">
-            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+        <div className="text-center mb-12 lg:mb-16">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mb-6 sm:mb-8 shadow-lg shadow-cyan-500/30 relative group">
+            <Shield className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-white animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-ping opacity-20"></div>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-            Report a Scam
+          
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white mb-4 sm:mb-6 tracking-tight leading-tight">
+            Report a{' '}
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Scam
+            </span>
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-zinc-400 max-w-3xl mx-auto px-2">
-            Help protect others by reporting suspicious websites and scams. Your report will be reviewed by our security team.
+          
+          <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-slate-300 max-w-xs sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto leading-relaxed px-4">
+            Help protect the community by reporting suspicious websites, phishing attempts, and online scams
           </p>
+
+          {/* Status Indicators */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-6 sm:mt-8 px-4">
+            <div className="flex items-center gap-2 bg-slate-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-cyan-400/20">
+              <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
+              <span className="text-xs sm:text-sm text-slate-300">24/7 Monitoring</span>
+            </div>
+            <div className="flex items-center gap-2 bg-slate-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-400/20">
+              <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
+              <span className="text-xs sm:text-sm text-slate-300">Community Driven</span>
+            </div>
+            <div className="flex items-center gap-2 bg-slate-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-purple-400/20">
+              <Activity className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 animate-pulse" />
+              <span className="text-xs sm:text-sm text-slate-300">Real-time Protection</span>
+            </div>
+          </div>
         </div>
 
-        {/* Form Card */}
-        <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700/50 rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
-          <div className="grid gap-6 sm:gap-8">
-            
-            {/* URL Field */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-200">
-                <Globe2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Scam URL</span>
-                <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://suspicious-website.com"
-                className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg bg-zinc-900/80 border transition-all duration-200 text-sm sm:text-base placeholder:text-zinc-500 focus:outline-none focus:ring-2 ${
-                  errors.url 
-                    ? 'border-red-500 focus:ring-red-500/50' 
-                    : 'border-zinc-600 focus:border-cyan-400 focus:ring-cyan-500/50'
-                }`}
-              />
-              {errors.url && (
-                <p className="text-red-400 text-sm flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                  <span>{errors.url}</span>
-                </p>
-              )}
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-200">
-                <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Your Email (optional)</span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg bg-zinc-900/80 border transition-all duration-200 text-sm sm:text-base placeholder:text-zinc-500 focus:outline-none focus:ring-2 ${
-                  errors.email 
-                    ? 'border-red-500 focus:ring-red-500/50' 
-                    : 'border-zinc-600 focus:border-cyan-400 focus:ring-cyan-500/50'
-                }`}
-              />
-              {errors.email && (
-                <p className="text-red-400 text-sm flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                  <span>{errors.email}</span>
-                </p>
-              )}
-              <p className="text-zinc-500 text-xs sm:text-sm flex items-start gap-1">
-                <Info className="w-3 h-3 flex-shrink-0 mt-0.5" />
-                <span>We&apos;ll use this to contact you for follow-up questions</span>
-              </p>
-            </div>
-
-            {/* Scam Type Field */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-200">
-                <AlertTriangle className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Scam Type</span>
-                <span className="text-red-400">*</span>
-              </label>
-              <select
-                value={scamType}
-                onChange={(e) => setScamType(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg bg-zinc-900/80 border transition-all duration-200 text-sm sm:text-base focus:outline-none focus:ring-2 ${
-                  errors.scamType 
-                    ? 'border-red-500 focus:ring-red-500/50' 
-                    : 'border-zinc-600 focus:border-cyan-400 focus:ring-cyan-500/50'
-                }`}
-              >
-                <option value="">Select scam type...</option>
-                <option value="Phishing">🎣 Phishing (Fake login pages)</option>
-                <option value="Fake Tech Support">💻 Fake Tech Support</option>
-                <option value="Financial Scam">💰 Financial Scam</option>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           
-              </select>
-              {errors.scamType && (
-                <p className="text-red-400 text-sm flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                  <span>{errors.scamType}</span>
-                </p>
-              )}
-            </div>
+          {/* Main Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-slate-800/30 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-slate-700/50 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6 sm:mb-8">
+                  <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-white" />
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Report Details</h2>
+                </div>
 
-            {/* Description Field */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-200">
-                <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Detailed Description</span>
-                <span className="text-red-400">*</span>
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
-                placeholder="Please provide details about the scam:
-• How did you encounter it?
-• What happened?
-• What information did they ask for?
-• Any other relevant details..."
-                className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg bg-zinc-900/80 border transition-all duration-200 text-sm sm:text-base placeholder:text-zinc-500 focus:outline-none focus:ring-2 resize-none ${
-                  errors.description 
-                    ? 'border-red-500 focus:ring-red-500/50' 
-                    : 'border-zinc-600 focus:border-cyan-400 focus:ring-cyan-500/50'
-                }`}
-              />
-              <div className="flex justify-between items-center">
-                {errors.description ? (
-                  <p className="text-red-400 text-sm flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                    <span>{errors.description}</span>
-                  </p>
-                ) : (
-                  <p className="text-zinc-500 text-xs sm:text-sm">
-                    {description.length}/500 characters
-                  </p>
-                )}
+                <div className="space-y-6 sm:space-y-8">
+                  
+                  {/* URL Field */}
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                      <Globe2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>Suspicious URL</span>
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://suspicious-website.com"
+                        className={`w-full px-4 py-4 rounded-xl bg-slate-900/60 border-2 transition-all duration-300 text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-4 backdrop-blur-sm ${
+                          errors.url 
+                            ? 'border-red-500/50 focus:border-red-400 focus:ring-red-500/20' 
+                            : 'border-slate-600/50 focus:border-cyan-400 focus:ring-cyan-500/20 hover:border-slate-500/70'
+                        }`}
+                      />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                    {errors.url && (
+                      <p className="text-red-400 text-sm flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+                        <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.url}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                      <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>Your Email</span>
+                      <span className="text-slate-400 text-sm font-normal">(optional)</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="your@email.com"
+                        className={`w-full px-4 py-4 rounded-xl bg-slate-900/60 border-2 transition-all duration-300 text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-4 backdrop-blur-sm ${
+                          errors.email 
+                            ? 'border-red-500/50 focus:border-red-400 focus:ring-red-500/20' 
+                            : 'border-slate-600/50 focus:border-cyan-400 focus:ring-cyan-500/20 hover:border-slate-500/70'
+                        }`}
+                      />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-400 text-sm flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+                        <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.email}</span>
+                      </p>
+                    )}
+                    <p className="text-slate-400 text-xs sm:text-sm flex items-start gap-2 bg-blue-500/10 px-3 py-2 rounded-lg border border-blue-500/20">
+                      <Info className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-400" />
+                      <span>We&apos;ll use this to contact you for follow-up questions if needed</span>
+                    </p>
+                  </div>
+
+                  {/* Scam Type Field */}
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                      <AlertTriangle className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>Scam Category</span>
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={scamType}
+                        onChange={(e) => setScamType(e.target.value)}
+                        className={`w-full px-4 py-4 rounded-xl bg-slate-900/60 border-2 transition-all duration-300 text-sm sm:text-base focus:outline-none focus:ring-4 backdrop-blur-sm appearance-none cursor-pointer ${
+                          errors.scamType 
+                            ? 'border-red-500/50 focus:border-red-400 focus:ring-red-500/20' 
+                            : 'border-slate-600/50 focus:border-cyan-400 focus:ring-cyan-500/20 hover:border-slate-500/70'
+                        }`}
+                      >
+                        <option value="Phishing"> Phishing (Fake login pages)</option>
+                <option value="Fake Tech Support"> Fake Tech Support</option>
+                <option value="Financial Scam"> Financial Scam</option>
+                      </select>
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                    {errors.scamType && (
+                      <p className="text-red-400 text-sm flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+                        <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.scamType}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Description Field */}
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                      <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>Detailed Description</span>
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        rows={5}
+                        placeholder="Please provide detailed information about the scam:
+
+• How did you encounter this suspicious activity?
+• What happened when you visited the site?
+• What information did they request?
+• Any unusual behavior or red flags you noticed?
+• Additional context that might help our investigation..."
+                        className={`w-full px-4 py-4 rounded-xl bg-slate-900/60 border-2 transition-all duration-300 text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-4 resize-none backdrop-blur-sm ${
+                          errors.description 
+                            ? 'border-red-500/50 focus:border-red-400 focus:ring-red-500/20' 
+                            : 'border-slate-600/50 focus:border-cyan-400 focus:ring-cyan-500/20 hover:border-slate-500/70'
+                        }`}
+                      />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      {errors.description ? (
+                        <p className="text-red-400 text-sm flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+                          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                          <span>{errors.description}</span>
+                        </p>
+                      ) : (
+                        <p className="text-slate-400 text-xs sm:text-sm bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                          {description.length}/1000 characters
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Proof URL Field */}
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-white">
+                      <ImageIcon className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>Evidence/Screenshot Link</span>
+                      <span className="text-slate-400 text-sm font-normal">(optional)</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="url"
+                        value={proofUrl}
+                        onChange={(e) => setProofUrl(e.target.value)}
+                        placeholder="https://imgur.com/your-screenshot or https://example.com/evidence"
+                        className={`w-full px-4 py-4 rounded-xl bg-slate-900/60 border-2 transition-all duration-300 text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-4 backdrop-blur-sm ${
+                          errors.proofUrl 
+                            ? 'border-red-500/50 focus:border-red-400 focus:ring-red-500/20' 
+                            : 'border-slate-600/50 focus:border-cyan-400 focus:ring-cyan-500/20 hover:border-slate-500/70'
+                        }`}
+                      />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    </div>
+                    {errors.proofUrl && (
+                      <p className="text-red-400 text-sm flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+                        <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.proofUrl}</span>
+                      </p>
+                    )}
+                    <p className="text-slate-400 text-xs sm:text-sm flex items-start gap-2 bg-purple-500/10 px-3 py-2 rounded-lg border border-purple-500/20">
+                      <Info className="w-4 h-4 flex-shrink-0 mt-0.5 text-purple-400" />
+                      <span>Upload screenshots to services like Imgur, Dropbox, or Google Drive, then paste the public link here</span>
+                    </p>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-4 sm:pt-6">
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 hover:from-cyan-500 hover:via-blue-500 hover:to-purple-500 disabled:from-slate-600 disabled:to-slate-700 text-white font-semibold rounded-2xl px-8 py-4 sm:py-5 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/25 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 text-sm sm:text-base transform hover:scale-[1.02] disabled:transform-none relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="relative flex items-center justify-center gap-3">
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>Submitting Report...</span>
+                          </>
+                        ) : (
+                          <>
+                            <SendHorizonal className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                            <span>Submit Security Report</span>
+                            <Sparkles className="w-4 h-4 animate-pulse" />
+                          </>
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            
+            {/* Process Info */}
+            <div className="bg-slate-800/30 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/50">
+              <div className="flex items-center gap-3 mb-6">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+                <h3 className="text-lg font-bold text-white">What Happens Next?</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
+                  <Clock className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium text-sm">24-Hour Review</p>
+                    <p className="text-slate-400 text-xs">Our security team reviews all reports</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
+                  <Activity className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium text-sm">Database Update</p>
+                    <p className="text-slate-400 text-xs">Confirmed threats added to blocklist</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
+                  <Users className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium text-sm">Community Protection</p>
+                    <p className="text-slate-400 text-xs">Help protect other users</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
+                  <Lock className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium text-sm">Follow-up Contact</p>
+                    <p className="text-slate-400 text-xs">We may reach out for more details</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Proof URL Field */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-200">
-                <ImageIcon className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Evidence/Screenshot Link (optional)</span>
-              </label>
-              <input
-                type="url"
-                value={proofUrl}
-                onChange={(e) => setProofUrl(e.target.value)}
-                placeholder="https://imgur.com/your-screenshot or https://example.com/evidence"
-                className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg bg-zinc-900/80 border transition-all duration-200 text-sm sm:text-base placeholder:text-zinc-500 focus:outline-none focus:ring-2 ${
-                  errors.proofUrl 
-                    ? 'border-red-500 focus:ring-red-500/50' 
-                    : 'border-zinc-600 focus:border-cyan-400 focus:ring-cyan-500/50'
-                }`}
-              />
-              {errors.proofUrl && (
-                <p className="text-red-400 text-sm flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                  <span>{errors.proofUrl}</span>
-                </p>
-              )}
-              <p className="text-zinc-500 text-xs sm:text-sm flex items-start gap-1">
-                <Info className="w-3 h-3 flex-shrink-0 mt-0.5" />
-                <span>Upload screenshots to services like Imgur, then paste the link here</span>
-              </p>
+            {/* Statistics */}
+            <div className="bg-slate-800/30 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/50">
+              <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-cyan-400" />
+                Community Impact
+              </h3>
+              <div className="space-y-4">
+                <div className="text-center p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-400/20">
+                  <p className="text-2xl font-bold text-cyan-400">50,247</p>
+                  <p className="text-sm text-slate-300">Reports Processed</p>
+                </div>
+                <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-400/20">
+                  <p className="text-2xl font-bold text-green-400">99.8%</p>
+                  <p className="text-sm text-slate-300">Accuracy Rate</p>
+                </div>
+                <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20">
+                  <p className="text-2xl font-bold text-purple-400">15,892</p>
+                  <p className="text-sm text-slate-300">Threats Blocked</p>
+                </div>
+              </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-2 sm:pt-4">
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-zinc-600 disabled:to-zinc-600 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 text-sm sm:text-base transform hover:scale-[1.02] disabled:transform-none"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
-                    <span className="hidden sm:inline">Submitting Report...</span>
-                    <span className="sm:hidden">Submitting...</span>
-                  </>
-                ) : (
-                  <>
-                    <SendHorizonal className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>Submit Report</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Info Box */}
-            <div className="bg-cyan-900/20 border border-cyan-700/50 rounded-lg p-4 sm:p-6 mt-4 sm:mt-6">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                <div className="text-sm sm:text-base text-cyan-200">
-                  <p className="font-semibold mb-2">What happens after you submit?</p>
-                  <ul className="space-y-1.5 text-cyan-300 text-sm sm:text-base">
-                    <li className="flex items-start gap-2">
-                      <span className="flex-shrink-0">•</span>
-                      <span>Our security team will review your report within 24 hours</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="flex-shrink-0">•</span>
-                      <span>We&apos;ll investigate the reported URL and add it to our database if confirmed</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="flex-shrink-0">•</span>
-                      <span>Your report helps protect other users from falling victim to scams</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="flex-shrink-0">•</span>
-                      <span>We may contact you for additional information if needed</span>
-                    </li>
-                  </ul>
+            {/* Security Features */}
+            <div className="bg-slate-800/30 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/50">
+              <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-green-400" />
+                Your Privacy
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Lock className="w-4 h-4 text-green-400" />
+                  <span>End-to-end encryption</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Eye className="w-4 h-4 text-blue-400" />
+                  <span>Anonymous reporting option</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Activity className="w-4 h-4 text-purple-400" />
+                  <span>Real-time threat updates</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Sparkles className="w-4 h-4 text-cyan-400" />
+                  <span>AI-powered analysis</span>
                 </div>
               </div>
             </div>

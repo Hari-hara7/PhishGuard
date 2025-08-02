@@ -53,6 +53,68 @@ export default function DashboardPage() {
   const [selectedFilter, setSelectedFilter] = useState('all')
   const [loading, setLoading] = useState(true)
 
+  // CSV Export Function
+  const exportToCSV = () => {
+    if (filteredReports.length === 0) {
+      alert('No data to export!')
+      return
+    }
+
+    try {
+      // Define CSV headers
+      const headers = ['ID', 'URL', 'Reporter Email', 'Scam Type', 'Description', 'Image URL', 'Date Reported']
+      
+      // Convert reports to CSV format
+      const csvData = filteredReports.map(report => [
+        report.id,
+        `"${report.url}"`, // Wrap in quotes to handle commas in URLs
+        report.reporterEmail || 'Anonymous',
+        report.scamType || 'Unknown',
+        `"${(report.description || '').replace(/"/g, '""')}"`, // Escape quotes in description
+        report.imageUrl || '',
+        report.createdAt?.toDate
+          ? new Date(report.createdAt.toDate()).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          : 'Unknown'
+      ])
+
+      // Combine headers and data
+      const csvContent = [headers, ...csvData]
+        .map(row => row.join(','))
+        .join('\n')
+
+      // Create and download the file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      
+      link.setAttribute('href', url)
+      link.setAttribute('download', `phishguard-reports-${new Date().toISOString().split('T')[0]}.csv`)
+      link.style.visibility = 'hidden'
+      
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      // Clean up the URL object
+      URL.revokeObjectURL(url)
+      
+      // Show success message
+      setTimeout(() => {
+        alert(`Successfully exported ${filteredReports.length} reports to CSV!`)
+      }, 100)
+      
+    } catch (error) {
+      console.error('Error exporting CSV:', error)
+      alert('Failed to export data. Please try again.')
+    }
+  }
+
   useEffect(() => {
     const q = query(collection(db, 'reports'), orderBy('createdAt', 'desc'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -312,9 +374,12 @@ export default function DashboardPage() {
             </select>
           </div>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors">
+          <button 
+            onClick={exportToCSV}
+            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
+          >
             <Download className="w-4 h-4" />
-            Export
+            Export CSV
           </button>
         </div>
 

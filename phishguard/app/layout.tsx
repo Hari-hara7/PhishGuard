@@ -1,6 +1,7 @@
 import './globals.css'
 import { ReactNode } from 'react'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import { Toaster } from 'sonner'
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -22,6 +23,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main className="min-h-screen px-4 py-8">
           {children}
         </main>
+
+        {/* Footer */}
+        <Footer />
       </body>
     </html>
   )
