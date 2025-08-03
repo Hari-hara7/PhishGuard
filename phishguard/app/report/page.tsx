@@ -452,7 +452,7 @@ export default function ReportPage() {
               </h3>
               <div className="space-y-4">
                 <div className="text-center p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-400/20">
-                  <p className="text-2xl font-bold text-cyan-400">50,247</p>
+                  <p className="text-2xl font-bold text-cyan-400">20+</p>
                   <p className="text-sm text-slate-300">Reports Processed</p>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-400/20">
@@ -460,7 +460,7 @@ export default function ReportPage() {
                   <p className="text-sm text-slate-300">Accuracy Rate</p>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-400/20">
-                  <p className="text-2xl font-bold text-purple-400">15,892</p>
+                  <p className="text-2xl font-bold text-purple-400">231</p>
                   <p className="text-sm text-slate-300">Threats Blocked</p>
                 </div>
               </div>
