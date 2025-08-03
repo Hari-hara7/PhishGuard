@@ -286,17 +286,17 @@ export default function Navbar() {
                     <Menu className="w-6 h-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white border-cyan-500/20 w-80 md:w-96">
-                  <SheetHeader className="border-b border-slate-700/50 pb-6">
-                    <SheetTitle className="flex items-center gap-4 text-xl">
-                      <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-600 rounded-2xl shadow-lg">
-                        <ShieldCheck className="w-7 h-7 text-white" />
-                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full flex items-center justify-center">
-                          <Sparkles className="w-2.5 h-2.5 text-white animate-pulse" />
+                <SheetContent side="right" className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white border-cyan-500/20 w-80 md:w-96 flex flex-col h-full">
+                  <SheetHeader className="border-b border-slate-700/50 pb-4 flex-shrink-0">
+                    <SheetTitle className="flex items-center gap-3 text-lg">
+                      <div className="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-600 rounded-xl shadow-lg">
+                        <ShieldCheck className="w-6 h-6 text-white" />
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                          <Sparkles className="w-2 h-2 text-white animate-pulse" />
                         </div>
                       </div>
                       <div>
-                        <div className="text-xl font-black bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent">
+                        <div className="text-lg font-black bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent">
                           PhishGuard
                         </div>
                         <div className="text-xs text-cyan-400/70 font-medium tracking-wider text-left">SECURITY SHIELD</div>
@@ -304,25 +304,25 @@ export default function Navbar() {
                     </SheetTitle>
                   </SheetHeader>
                   
-                  <div className="mt-8 space-y-8">
+                  <div className="flex-1 flex flex-col mt-4 space-y-6 pb-4 overflow-y-auto">
                     {/* User Info - Mobile */}
                     {user && (
-                      <div className="flex items-center space-x-4 p-5 bg-slate-800/40 rounded-3xl border border-slate-700/30 backdrop-blur-sm">
-                        <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-cyan-400/50 relative bg-gradient-to-br from-cyan-500 to-blue-600">
+                      <div className="flex items-center space-x-3 p-4 bg-slate-800/40 rounded-2xl border border-slate-700/30 backdrop-blur-sm flex-shrink-0">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden border-2 border-cyan-400/50 relative bg-gradient-to-br from-cyan-500 to-blue-600 flex-shrink-0">
                           <Image
                             src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email || 'User')}&background=0891b2&color=fff`}
                             alt={user.displayName || 'Profile'}
-                            width={56}
-                            height={56}
+                            width={48}
+                            height={48}
                             className="w-full h-full object-cover"
                             unoptimized
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-base font-bold text-white truncate">{user.displayName}</p>
-                          <p className="text-sm text-cyan-400/70 truncate">{user.email}</p>
+                          <p className="text-sm font-bold text-white truncate">{user.displayName}</p>
+                          <p className="text-xs text-cyan-400/70 truncate">{user.email}</p>
                           <div className="flex items-center mt-1">
-                            <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                            <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                             <span className="text-xs text-green-400 font-medium">Active</span>
                           </div>
                         </div>
@@ -330,59 +330,64 @@ export default function Navbar() {
                     )}
 
                     {/* Navigation Links - Mobile */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider px-3">Navigation</h3>
-                      <NavLinks isMobile={true} />
+                    <div className="space-y-3 flex-1">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">Navigation</h3>
+                      <div className="space-y-1">
+                        <NavLinks isMobile={true} />
+                      </div>
                     </div>
 
-                    {/* Auth Button - Mobile */}
-                    <div className="pt-6 border-t border-slate-700/50">
+                    {/* Account Actions - Mobile (Fixed at bottom) */}
+                    <div className="border-t border-slate-700/50 pt-4 flex-shrink-0 space-y-3">
                       {!user ? (
                         <Button 
                           onClick={login}
                           disabled={isLoading}
-                          className="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 hover:from-cyan-500 hover:via-blue-500 hover:to-purple-500 text-white py-4 rounded-2xl font-semibold shadow-lg text-base"
+                          className="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 hover:from-cyan-500 hover:via-blue-500 hover:to-purple-500 text-white py-3 rounded-xl font-semibold shadow-lg text-sm"
                         >
                           {isLoading ? (
-                            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3" />
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                           ) : (
-                            <LogIn className="w-6 h-6 mr-3" />
+                            <LogIn className="w-5 h-5 mr-2" />
                           )}
                           <span>{isLoading ? 'Signing in...' : 'Sign in with Google'}</span>
                         </Button>
                       ) : (
-                        <div className="space-y-4">
-                          <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider px-3">Account</h3>
-                          <Button
+                        <div className="space-y-2">
+                          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">Account</h3>
+                          
+                          {/* Settings Button */}
+                          <button
                             onClick={() => {
                               window.location.href = '/settings'
                             }}
-                            variant="ghost"
-                            className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800/60 py-5 rounded-2xl border border-slate-700/50 hover:border-cyan-500/50 text-base font-medium"
+                            className="w-full flex items-center gap-3 p-3 text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-xl border border-slate-700/50 hover:border-cyan-500/50 text-sm font-medium transition-all duration-200 group"
                           >
-                            <div className="w-10 h-10 rounded-xl bg-slate-800/50 flex items-center justify-center mr-4">
-                              <Settings className="w-5 h-5" />
+                            <div className="w-8 h-8 rounded-lg bg-slate-800/50 flex items-center justify-center group-hover:bg-cyan-500/20 transition-all duration-200 flex-shrink-0">
+                              <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
                             </div>
-                            <div className="text-left">
+                            <div className="text-left flex-1">
                               <p className="font-semibold">Settings</p>
                               <p className="text-xs text-slate-500">Manage account</p>
                             </div>
-                          </Button>
-                          <Button 
+                          </button>
+                          
+                          {/* Sign Out Button */}
+                          <button
                             onClick={() => {
                               logout()
                             }}
                             disabled={isLoading}
-                            className="w-full justify-start bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-red-200 border border-red-500/30 hover:border-red-400/50 py-5 rounded-2xl font-semibold text-base transition-all duration-300 disabled:opacity-50 shadow-lg"
+                            className="w-full flex items-center gap-3 p-3 bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-red-200 border border-red-500/30 hover:border-red-400/50 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 shadow-lg group"
                           >
-                            <div className="w-10 h-10 rounded-xl bg-red-800/50 flex items-center justify-center mr-4">
-                              <LogOut className="w-5 h-5" />
+                            <div className="w-8 h-8 rounded-lg bg-red-800/50 flex items-center justify-center group-hover:bg-red-500/30 transition-all duration-200 flex-shrink-0">
+                              <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
                             </div>
-                            <div className="text-left">
+                            <div className="text-left flex-1">
                               <p className="font-semibold">{isLoading ? 'Signing out...' : 'Sign Out'}</p>
                               <p className="text-xs text-red-400/70">Exit session</p>
                             </div>
-                          </Button>
+                          </button>
                         </div>
                       )}
                     </div>
