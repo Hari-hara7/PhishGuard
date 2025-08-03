@@ -111,14 +111,14 @@ export default function HomePage() {
                 className="text-cyan-400 px-4 sm:px-6 py-2 sm:py-3 border-cyan-400/50 bg-cyan-400/10 backdrop-blur-sm text-xs sm:text-sm lg:text-base font-medium hover:bg-cyan-400/20 transition-all duration-300 cursor-pointer group"
               >
                 <Rocket className="w-3 h-3 sm:w-4 sm:h-4 mr-2 group-hover:animate-bounce" />
-                🚀 Next-Gen AI Security Platform
+                 Next-Gen AI Security Platform
                 <Activity className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
               </Badge>
             </div>
 
-            {/* Main Heading - Fully Responsive */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold tracking-tight leading-tight">
-              <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 sm:mb-4">
+            {/* Main Heading - Enhanced Mobile Responsive */}
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold tracking-tight leading-tight px-2">
+              <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-1 xs:mb-2 sm:mb-4">
                 Advanced Phishing
               </span>
               <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
@@ -126,59 +126,59 @@ export default function HomePage() {
               </span>
             </h1>
 
-            {/* Dynamic Feature Display */}
-            <div className="h-12 sm:h-16 flex items-center justify-center px-4">
-              <div className="flex items-center space-x-2 sm:space-x-3 bg-zinc-800/50 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 transition-all duration-500 hover:border-cyan-400/50 hover:bg-zinc-800/70">
+            {/* Dynamic Feature Display - Mobile Optimized */}
+            <div className="h-10 xs:h-12 sm:h-16 flex items-center justify-center px-2 sm:px-4">
+              <div className="flex items-center space-x-1 xs:space-x-2 sm:space-x-3 bg-zinc-800/50 backdrop-blur-sm rounded-full px-3 xs:px-4 sm:px-6 py-2 xs:py-2.5 sm:py-3 border border-zinc-700/50 transition-all duration-500 hover:border-cyan-400/50 hover:bg-zinc-800/70">
                 {React.createElement(features[currentFeature].icon, {
-                  className: `w-4 h-4 sm:w-5 sm:h-5 text-${features[currentFeature].color}-400 animate-pulse`
+                  className: `w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 text-${features[currentFeature].color}-400 animate-pulse flex-shrink-0`
                 })}
-                <span className="text-zinc-300 text-xs sm:text-sm lg:text-base font-medium max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl text-center leading-relaxed">
+                <span className="text-zinc-300 text-xs xs:text-xs sm:text-sm lg:text-base font-medium max-w-[200px] xs:max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl text-center leading-relaxed truncate sm:whitespace-normal">
                   {features[currentFeature].text}
                 </span>
               </div>
             </div>
 
-            {/* Enhanced Description */}
-            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-zinc-300 leading-relaxed max-w-xs sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4">
-              PhishGuard leverages <span className="text-cyan-400 font-semibold inline-flex items-center"><Brain className="w-4 h-4 mx-1" />advanced AI</span> and 
-              <span className="text-blue-400 font-semibold inline-flex items-center"><Cpu className="w-4 h-4 mx-1" />machine learning</span> to detect phishing, 
-              malware, and scam threats — <span className="text-purple-400 font-semibold inline-flex items-center"><Timer className="w-4 h-4 mx-1" />in real-time</span>.
+            {/* Enhanced Description - Mobile Optimized */}
+            <p className="text-sm xs:text-base sm:text-lg lg:text-xl xl:text-2xl text-zinc-300 leading-relaxed max-w-[280px] xs:max-w-sm sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-2 sm:px-4">
+              PhishGuard leverages <span className="text-cyan-400 font-semibold inline-flex items-center"><Brain className="w-3 h-3 xs:w-4 xs:h-4 mx-1" />advanced AI</span> and 
+              <span className="text-blue-400 font-semibold inline-flex items-center"><Cpu className="w-3 h-3 xs:w-4 xs:h-4 mx-1" />machine learning</span> to detect phishing, 
+              malware, and scam threats — <span className="text-purple-400 font-semibold inline-flex items-center"><Timer className="w-3 h-3 xs:w-4 xs:h-4 mx-1" />in real-time</span>.
             </p>
 
-            {/* CTA Buttons - Responsive */}
-            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 lg:gap-6 mt-8 sm:mt-12 px-4 w-full max-w-2xl mx-auto">
+            {/* CTA Buttons - Enhanced Mobile Responsive */}
+            <div className="flex flex-col gap-3 xs:gap-4 sm:flex-row sm:justify-center sm:gap-4 lg:gap-6 mt-6 xs:mt-8 sm:mt-12 px-2 xs:px-4 w-full max-w-sm xs:max-w-md sm:max-w-2xl mx-auto">
               <Link
                 href="/install"
-                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
+                className="group inline-flex items-center justify-center gap-2 xs:gap-2 sm:gap-3 px-4 xs:px-6 sm:px-8 lg:px-10 py-3 xs:py-3.5 sm:py-4 lg:py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-lg xs:rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105 text-xs xs:text-sm sm:text-base lg:text-lg"
               >
-                <Download className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-bounce" />
+                <Download className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 group-hover:animate-bounce" />
                 Install Extension
-                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/report"
-                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 border-2 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 font-semibold rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base lg:text-lg"
+                className="group inline-flex items-center justify-center gap-2 xs:gap-2 sm:gap-3 px-4 xs:px-6 sm:px-8 lg:px-10 py-3 xs:py-3.5 sm:py-4 lg:py-5 border-2 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 font-semibold rounded-lg xs:rounded-xl lg:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs xs:text-sm sm:text-base lg:text-lg"
               >
-                <UploadCloud className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-pulse" />
+                <UploadCloud className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 group-hover:animate-pulse" />
                 Report Threat
-                <MousePointer className="w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
+                <MousePointer className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
               </Link>
             </div>
 
-            {/* Enhanced Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 lg:mt-20 px-4 max-w-6xl mx-auto">
+            {/* Enhanced Stats Grid - Mobile Optimized */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-6 lg:gap-8 mt-8 xs:mt-12 sm:mt-16 lg:mt-20 px-2 xs:px-4 max-w-6xl mx-auto">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center group cursor-pointer">
-                  <div className="bg-zinc-800/30 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:bg-zinc-800/50 group-hover:shadow-lg group-hover:shadow-cyan-400/10 transform hover:-translate-y-1">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="bg-zinc-800/30 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-2 xs:p-3 sm:p-6 lg:p-8 border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:bg-zinc-800/50 group-hover:shadow-lg group-hover:shadow-cyan-400/10 transform hover:-translate-y-1">
+                    <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-1 xs:mb-2 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
                       {React.createElement(stat.icon, {
-                        className: "w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white"
+                        className: "w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white"
                       })}
                     </div>
-                    <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                    <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
                       {stat.number}
                     </div>
-                    <div className="text-zinc-400 text-xs sm:text-sm lg:text-base font-medium mt-1 sm:mt-2">
+                    <div className="text-zinc-400 text-xs xs:text-xs sm:text-sm lg:text-base font-medium mt-0.5 xs:mt-1 sm:mt-2">
                       {stat.label}
                     </div>
                   </div>
@@ -186,101 +186,101 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Enhanced Social Proof */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 text-zinc-400 px-4">
-              <div className="flex items-center gap-2 sm:gap-3 bg-zinc-800/30 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 hover:border-cyan-400/30 transition-all duration-300">
-                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
-                <span className="text-xs sm:text-sm lg:text-base">
+            {/* Enhanced Social Proof - Mobile Optimized */}
+            <div className="flex flex-col xs:flex-row items-center justify-center gap-2 xs:gap-3 sm:gap-6 lg:gap-8 mt-8 xs:mt-12 sm:mt-16 text-zinc-400 px-2 xs:px-4">
+              <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 border border-zinc-700/50 hover:border-cyan-400/30 transition-all duration-300">
+                <Users className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 text-cyan-400" />
+                <span className="text-xs xs:text-xs sm:text-sm lg:text-base">
                   Trusted by <span className="text-cyan-400 font-semibold">50K+</span> users
                 </span>
-                <Heart className="w-4 h-4 text-pink-400 animate-pulse" />
+                <Heart className="w-3 h-3 xs:w-4 xs:h-4 text-pink-400 animate-pulse" />
               </div>
-              <div className="hidden sm:block w-1 h-1 bg-zinc-600 rounded-full"></div>
-              <div className="flex items-center gap-1 sm:gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-zinc-700/50 hover:border-yellow-400/30 transition-all duration-300">
+              <div className="hidden xs:block w-1 h-1 bg-zinc-600 rounded-full"></div>
+              <div className="flex items-center gap-1 xs:gap-1 sm:gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 border border-zinc-700/50 hover:border-yellow-400/30 transition-all duration-300">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
                 ))}
-                <span className="ml-2 text-xs sm:text-sm lg:text-base">4.9/5 rating</span>
+                <span className="ml-1 xs:ml-2 text-xs xs:text-xs sm:text-sm lg:text-base">4.9/5 rating</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Advanced Features Section */}
-        <section className="py-12 sm:py-16 lg:py-20 xl:py-24 px-4 sm:px-6 lg:px-8">
+        {/* Advanced Features Section - Mobile Enhanced */}
+        <section className="py-8 xs:py-12 sm:py-16 lg:py-20 xl:py-24 px-2 xs:px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16 lg:mb-20">
-              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-6 sm:mb-8 shadow-lg shadow-cyan-500/30">
-                <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
+            <div className="text-center mb-8 xs:mb-12 sm:mb-16 lg:mb-20">
+              <div className="inline-flex items-center justify-center w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-4 xs:mb-6 sm:mb-8 shadow-lg shadow-cyan-500/30">
+                <Zap className="w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4 sm:mb-6">
+              <h2 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-3 xs:mb-4 sm:mb-6 px-2">
                 Enterprise-Grade Security Features
               </h2>
-              <p className="text-base sm:text-lg lg:text-xl text-zinc-400 max-w-xs sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto leading-relaxed">
+              <p className="text-sm xs:text-base sm:text-lg lg:text-xl text-zinc-400 max-w-[280px] xs:max-w-sm sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto leading-relaxed px-2">
                 Comprehensive cybersecurity solutions powered by cutting-edge AI technology and machine learning algorithms
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-              {/* Real-Time Detection */}
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2 relative overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 lg:gap-8">
+              {/* Real-Time Detection - Mobile Enhanced */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-3 xs:p-4 sm:p-6 lg:p-8 rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10 transform hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-500/30">
-                    <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg xs:rounded-xl lg:rounded-2xl flex items-center justify-center mb-3 xs:mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-500/30">
+                    <ShieldCheck className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-cyan-400 transition-colors">
+                  <h3 className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold mb-2 xs:mb-3 sm:mb-4 text-white group-hover:text-cyan-400 transition-colors">
                     Real-Time Detection
                   </h3>
-                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                  <p className="text-zinc-400 text-xs xs:text-sm sm:text-base leading-relaxed mb-3 xs:mb-4">
                     Advanced AI algorithms analyze URLs instantly using machine learning patterns and threat intelligence databases.
                   </p>
-                  <div className="flex items-center text-cyan-400 text-xs sm:text-sm font-medium">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                  <div className="flex items-center text-cyan-400 text-xs xs:text-xs sm:text-sm font-medium">
+                    <CheckCircle className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 mr-1 xs:mr-2" />
                     99.9% accuracy rate
-                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                    <Eye className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 ml-1 xs:ml-2 animate-pulse" />
                   </div>
                 </div>
               </div>
 
-              {/* Malware Protection */}
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-red-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-400/10 transform hover:-translate-y-2 relative overflow-hidden">
+              {/* Malware Protection - Mobile Enhanced */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-3 xs:p-4 sm:p-6 lg:p-8 rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-red-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-400/10 transform hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-red-500/30">
-                    <Bug className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg xs:rounded-xl lg:rounded-2xl flex items-center justify-center mb-3 xs:mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-red-500/30">
+                    <Bug className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-red-400 transition-colors">
+                  <h3 className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold mb-2 xs:mb-3 sm:mb-4 text-white group-hover:text-red-400 transition-colors">
                     Malware Protection
                   </h3>
-                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                  <p className="text-zinc-400 text-xs xs:text-sm sm:text-base leading-relaxed mb-3 xs:mb-4">
                     Proactive defense against malware, ransomware, and malicious scripts with behavioral analysis.
                   </p>
-                  <div className="flex items-center text-red-400 text-xs sm:text-sm font-medium">
-                    <Lock className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                  <div className="flex items-center text-red-400 text-xs xs:text-xs sm:text-sm font-medium">
+                    <Lock className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 mr-1 xs:mr-2" />
                     Enterprise-grade protection
-                    <Database className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                    <Database className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 ml-1 xs:ml-2 animate-pulse" />
                   </div>
                 </div>
               </div>
 
-              {/* Global Coverage */}
-              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-400/10 transform hover:-translate-y-2 relative overflow-hidden sm:col-span-2 lg:col-span-1">
+              {/* Global Coverage - Mobile Enhanced */}
+              <div className="group bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm p-3 xs:p-4 sm:p-6 lg:p-8 rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl border border-zinc-700/50 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-400/10 transform hover:-translate-y-2 relative overflow-hidden sm:col-span-2 lg:col-span-1">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
-                    <Globe2 className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg xs:rounded-xl lg:rounded-2xl flex items-center justify-center mb-3 xs:mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
+                    <Globe2 className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-400 transition-colors">
+                  <h3 className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold mb-2 xs:mb-3 sm:mb-4 text-white group-hover:text-purple-400 transition-colors">
                     Global Threat Intelligence
                   </h3>
-                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-4">
+                  <p className="text-zinc-400 text-xs xs:text-sm sm:text-base leading-relaxed mb-3 xs:mb-4">
                     Worldwide threat monitoring with real-time updates from our global security network.
                   </p>
-                  <div className="flex items-center text-purple-400 text-xs sm:text-sm font-medium">
-                    <Wifi className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                  <div className="flex items-center text-purple-400 text-xs xs:text-xs sm:text-sm font-medium">
+                    <Wifi className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 mr-1 xs:mr-2" />
                     200+ countries monitored
-                    <Command className="w-3 h-3 sm:w-4 sm:h-4 ml-2 animate-pulse" />
+                    <Command className="w-3 h-3 xs:w-3 xs:h-3 sm:w-4 sm:h-4 ml-1 xs:ml-2 animate-pulse" />
                   </div>
                 </div>
               </div>
