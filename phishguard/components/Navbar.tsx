@@ -21,6 +21,7 @@ import {
   Mail,
   Download,
   BookOpen,
+  MessageCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -123,6 +124,10 @@ export default function Navbar() {
             <Link href="/awareness" className={linkClass('/awareness')}>
               <BookOpen className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/awareness') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Awareness Hub</span>
+            </Link>
+            <Link href="/chat" className={linkClass('/chat')}>
+              <MessageCircle className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/chat') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
+              <span>Chat Support</span>
             </Link>
          
           </>
