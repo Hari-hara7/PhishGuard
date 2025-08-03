@@ -20,6 +20,7 @@ import {
   FileText,
   Mail,
   Download,
+  BookOpen,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -118,6 +119,10 @@ export default function Navbar() {
             <Link href="/dashboard" className={linkClass('/dashboard')}>
               <LayoutDashboard className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/dashboard') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Dashboard</span>
+            </Link>
+            <Link href="/awareness" className={linkClass('/awareness')}>
+              <BookOpen className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/awareness') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
+              <span>Awareness Hub</span>
             </Link>
          
           </>
