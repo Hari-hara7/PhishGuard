@@ -325,7 +325,7 @@ export default function InstallPage() {
                 <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <Users className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
                   <span className="text-base sm:text-lg text-gray-300">
-                    Trusted by <span className="text-cyan-400 font-bold">50K+</span> users worldwide
+                    Trusted by <span className="text-cyan-400 font-bold">50+</span> users worldwide
                   </span>
                 </div>
                 

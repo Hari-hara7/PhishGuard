@@ -200,7 +200,7 @@ export default function HomePage() {
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
                 ))}
-                <span className="ml-1 xs:ml-2 text-xs xs:text-xs sm:text-sm lg:text-base">4.9/5 rating</span>
+                <span className="ml-1 xs:ml-2 text-xs xs:text-xs sm:text-sm lg:text-base">4.2/5 rating</span>
               </div>
             </div>
           </div>
