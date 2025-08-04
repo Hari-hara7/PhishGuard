@@ -37,6 +37,7 @@ export default function Navbar() {
   const [user, setUser] = useState<FirebaseUser | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false) // 🆕 Add mobile menu state
   const pathname = usePathname()
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export default function Navbar() {
     try {
       await signOut(auth)
       toast.success('Successfully signed out!')
+      setIsMobileMenuOpen(false) // 🆕 Close mobile menu on logout
     } catch (error) {
       console.error('Logout failed:', error)
       toast.error('Logout failed. Please try again.')
@@ -74,6 +76,11 @@ export default function Navbar() {
 
   const isActiveLink = (path: string) => {
     return pathname === path
+  }
+
+  // 🆕 Function to close mobile menu
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
   }
 
   const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
@@ -87,49 +94,68 @@ export default function Navbar() {
       }
     `
 
+    // 🆕 Create a wrapper component for mobile links that closes the menu
+    const MobileLink = ({ href, children, className }: { href: string, children: React.ReactNode, className: string }) => {
+      if (isMobile) {
+        return (
+          <Link 
+            href={href} 
+            className={className}
+            onClick={closeMobileMenu} // 🆕 Close menu on click
+          >
+            {children}
+          </Link>
+        )
+      }
+      return (
+        <Link href={href} className={className}>
+          {children}
+        </Link>
+      )
+    }
+
     return (
       <div className={`${isMobile ? 'flex flex-col space-y-2' : 'flex items-center space-x-2'}`}>
-        <Link href="/" className={linkClass('/')}>
+        <MobileLink href="/" className={linkClass('/')}>
           <Home className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
           <span>Home</span>
-        </Link>
+        </MobileLink>
 
         {user && (
           <>
-            <Link href="/link" className={linkClass('/link')}>
+            <MobileLink href="/link" className={linkClass('/link')}>
               <Link2 className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/link') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Link Scanner</span>
-            </Link>
-            <Link href="/doc" className={linkClass('/doc')}>
+            </MobileLink>
+            <MobileLink href="/doc" className={linkClass('/doc')}>
               <FileText className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/doc') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Doc Scanner</span>
-            </Link>
-            <Link href="/email" className={linkClass('/email')}>
+            </MobileLink>
+            <MobileLink href="/email" className={linkClass('/email')}>
               <Mail className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/email') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Email Scanner</span>
-            </Link>
-            <Link href="/install" className={linkClass('/install')}>
+            </MobileLink>
+            <MobileLink href="/install" className={linkClass('/install')}>
               <Download className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/install') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Install</span>
-            </Link>
+            </MobileLink>
            
-            <Link href="/report" className={linkClass('/report')}>
+            <MobileLink href="/report" className={linkClass('/report')}>
               <ShieldCheck className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/report') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Report</span>
-            </Link>
-            <Link href="/dashboard" className={linkClass('/dashboard')}>
+            </MobileLink>
+            <MobileLink href="/dashboard" className={linkClass('/dashboard')}>
               <LayoutDashboard className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/dashboard') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Dashboard</span>
-            </Link>
-            <Link href="/awareness" className={linkClass('/awareness')}>
+            </MobileLink>
+            <MobileLink href="/awareness" className={linkClass('/awareness')}>
               <BookOpen className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/awareness') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Awareness Hub</span>
-            </Link>
-            <Link href="/chat" className={linkClass('/chat')}>
+            </MobileLink>
+            <MobileLink href="/chat" className={linkClass('/chat')}>
               <MessageCircle className={`w-4 h-4 transition-transform duration-200 ${isActiveLink('/chat') ? 'text-cyan-400' : 'group-hover:scale-105'}`} />
               <span>Chat Support</span>
-            </Link>
-         
+            </MobileLink>
           </>
         )}
       </div>
@@ -281,7 +307,7 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <Sheet>
+              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}> {/* 🆕 Control open state */}
                 <SheetTrigger asChild>
                   <Button 
                     variant="ghost" 
@@ -346,7 +372,10 @@ export default function Navbar() {
                     <div className="border-t border-slate-700/50 pt-4 flex-shrink-0 space-y-3">
                       {!user ? (
                         <Button 
-                          onClick={login}
+                          onClick={() => {
+                            login()
+                            closeMobileMenu() // 🆕 Close menu after login attempt
+                          }}
                           disabled={isLoading}
                           className="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 hover:from-cyan-500 hover:via-blue-500 hover:to-purple-500 text-white py-3 rounded-xl font-semibold shadow-lg text-sm"
                         >
@@ -365,6 +394,7 @@ export default function Navbar() {
                           <button
                             onClick={() => {
                               window.location.href = '/settings'
+                              closeMobileMenu() // 🆕 Close menu when navigating to settings
                             }}
                             className="w-full flex items-center gap-3 p-3 text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-xl border border-slate-700/50 hover:border-cyan-500/50 text-sm font-medium transition-all duration-200 group"
                           >
@@ -379,9 +409,7 @@ export default function Navbar() {
                           
                           {/* Sign Out Button */}
                           <button
-                            onClick={() => {
-                              logout()
-                            }}
+                            onClick={logout} // 🆕 logout function already closes menu
                             disabled={isLoading}
                             className="w-full flex items-center gap-3 p-3 bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-red-200 border border-red-500/30 hover:border-red-400/50 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 shadow-lg group"
                           >
