@@ -267,9 +267,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **FastAPI** for the robust backend framework
 - **Tailwind CSS** for the beautiful UI components
 - **Open Source Community** for inspiration and resources
-
+  
+  ## 🙏 **Excel sheet**
 ---
-
+https://excalidraw.com/#room=126d80d0306f25a0d279,AN6iAVsNa5ft1YKGiZR_CA
 <div align="center">
 
 ### 🌟 **Star us on GitHub if this project helped you!**
