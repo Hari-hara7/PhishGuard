@@ -55,7 +55,7 @@ PhishGuard is a comprehensive cybersecurity platform designed specifically for *
 
 ### 1️⃣ **Clone Repository**
 ```bash
-git clone https://github.com/yourusername/PhishGuard.git
+git clone https://github.com/Hari-hara7/PhishGuard.git
 cd PhishGuard
 ```
 
