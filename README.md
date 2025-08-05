@@ -99,23 +99,46 @@ python -m uvicorn app.main:app --reload
 
 ## 🏗️ **Architecture**
 
+
+
 ```mermaid
+%%{init: {"theme":"dark"}}%%
 graph TB
+    style A fill:#222,color:#fff
+    style B fill:#222,color:#fff
+    style C fill:#222,color:#fff
+    style D fill:#222,color:#fff
+    style E fill:#222,color:#fff
+    style F fill:#222,color:#fff
+    style G fill:#222,color:#fff
+    style H fill:#222,color:#fff
+    style I fill:#222,color:#fff
+    style J fill:#222,color:#fff
+    style K fill:#222,color:#fff
+    style L fill:#222,color:#fff
+
     A[🌐 Next.js Frontend] --> B[🔥 Firebase Auth]
     A --> C[🗄️ Firestore Database]
     A --> D[🤖 FastAPI Backend]
-    
+    A --> L[🧩 Chrome Extension]
+
+    L --> B
+    L --> C
+
     D --> E[📧 Email Scanner]
     D --> F[🔗 Link Analyzer] 
     D --> G[📄 Document Scanner]
-    
+
     E --> H[🧠 AI/ML Models]
     F --> H
     G --> H
-    
+
     I[👨‍🎓 Students] --> A
     J[👨‍🏫 Educators] --> A
     K[🏛️ Universities] --> A
+    I --> L
+    J --> L
+    K --> L
 ```
 
 ### **Tech Stack**
