@@ -101,7 +101,6 @@ python -m uvicorn app.main:app --reload
 
 
 
-```mermaid
 %%{init: {"theme":"dark"}}%%
 graph TB
     style A fill:#222,color:#fff
@@ -139,7 +138,7 @@ graph TB
     I --> L
     J --> L
     K --> L
-```
+
 
 ### **Tech Stack**
 
