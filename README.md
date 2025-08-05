@@ -99,7 +99,7 @@ python -m uvicorn app.main:app --reload
 
 ## 🏗️ **Architecture**
 
-
+```mermaid
 
 %%{init: {"theme":"dark"}}%%
 graph TB
