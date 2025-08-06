@@ -55,7 +55,7 @@ PhishGuard is a comprehensive cybersecurity platform designed specifically for *
 
 ### 1️⃣ **Clone Repository**
 ```bash
-git clone https://github.com/yourusername/PhishGuard.git
+git clone https://github.com/Hari-hara7/PhishGuard.git
 cd PhishGuard
 ```
 
@@ -100,22 +100,44 @@ python -m uvicorn app.main:app --reload
 ## 🏗️ **Architecture**
 
 ```mermaid
+
+%%{init: {"theme":"dark"}}%%
 graph TB
+    style A fill:#222,color:#fff
+    style B fill:#222,color:#fff
+    style C fill:#222,color:#fff
+    style D fill:#222,color:#fff
+    style E fill:#222,color:#fff
+    style F fill:#222,color:#fff
+    style G fill:#222,color:#fff
+    style H fill:#222,color:#fff
+    style I fill:#222,color:#fff
+    style J fill:#222,color:#fff
+    style K fill:#222,color:#fff
+    style L fill:#222,color:#fff
+
     A[🌐 Next.js Frontend] --> B[🔥 Firebase Auth]
     A --> C[🗄️ Firestore Database]
     A --> D[🤖 FastAPI Backend]
-    
+    A --> L[🧩 Chrome Extension]
+
+    L --> B
+    L --> C
+
     D --> E[📧 Email Scanner]
     D --> F[🔗 Link Analyzer] 
     D --> G[📄 Document Scanner]
-    
+
     E --> H[🧠 AI/ML Models]
     F --> H
     G --> H
-    
+
     I[👨‍🎓 Students] --> A
     J[👨‍🏫 Educators] --> A
     K[🏛️ Universities] --> A
+    I --> L
+    J --> L
+    K --> L
 ```
 
 ### **Tech Stack**
@@ -267,9 +289,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **FastAPI** for the robust backend framework
 - **Tailwind CSS** for the beautiful UI components
 - **Open Source Community** for inspiration and resources
-
+  
+  ## 🙏 **Excel sheet**
 ---
-
+https://excalidraw.com/#room=126d80d0306f25a0d279,AN6iAVsNa5ft1YKGiZR_CA
 <div align="center">
 
 ### 🌟 **Star us on GitHub if this project helped you!**
