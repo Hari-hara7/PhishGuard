@@ -11,13 +11,11 @@ import {
   Zap,
   Eye,
   Clock,
-  Activity,
   FileCheck,
   Lock,
   Cpu,
   Target,
   Brain,
-  Fingerprint,
   Command,
   ArrowRight,
   Copy,
@@ -36,17 +34,6 @@ interface DocScanResult {
   prediction: 'Fake' | 'Legit'
   confidence: number
   extracted_text: string
-  threat_level?: string
-  risk_score?: number
-  analysis?: {
-    file_size?: string
-    file_type?: string
-    security_score?: number
-    malware_detected?: boolean
-    suspicious_content?: string[]
-    text_analysis?: string[]
-    metadata_risks?: string[]
-  }
 }
 
 interface FirebaseDocRecord {
@@ -54,8 +41,6 @@ interface FirebaseDocRecord {
   filename: string
   prediction: 'Fake' | 'Legit'
   confidence: number
-  threat_level?: string
-  risk_score?: number
   extracted_text: string
   timestamp: ReturnType<typeof serverTimestamp>
   user_id: string
@@ -72,7 +57,7 @@ export default function DocScanPage() {
   const [localHistory, setLocalHistory] = useState<FirebaseDocRecord[]>([])
   const [dragActive, setDragActive] = useState(false)
 
-  // Function to save scan to Firebase
+ 
   const saveToFirebase = async (filename: string, scanResult: DocScanResult) => {
     console.log('saveToFirebase called with:', { filename, scanResult, user: user?.uid })
     
@@ -85,12 +70,9 @@ export default function DocScanPage() {
           filename: filename,
           prediction: scanResult.prediction,
           confidence: scanResult.confidence,
-          threat_level: scanResult.threat_level || 'Low',
-          risk_score: scanResult.risk_score || 0,
           extracted_text: scanResult.extracted_text || '',
           timestamp: serverTimestamp(),
-          user_id: user.uid,
-          analysis: scanResult.analysis || {}
+          user_id: user.uid
         }
         
         console.log('Document data to save:', docData)
@@ -99,15 +81,13 @@ export default function DocScanPage() {
       } catch (error) {
         console.error('Error saving to Firebase:', error)
         
-        // Fallback: Save to localStorage if Firebase fails
+        
         const localHistory = JSON.parse(localStorage.getItem('docScanHistory') || '[]')
         const newScan = {
           id: Date.now().toString(),
           filename: filename,
           prediction: scanResult.prediction,
           confidence: scanResult.confidence,
-          threat_level: scanResult.threat_level,
-          risk_score: scanResult.risk_score,
           extracted_text: scanResult.extracted_text,
           timestamp: new Date().toISOString(),
           user_id: user.uid
@@ -125,8 +105,6 @@ export default function DocScanPage() {
         filename: filename,
         prediction: scanResult.prediction,
         confidence: scanResult.confidence,
-        threat_level: scanResult.threat_level,
-        risk_score: scanResult.risk_score,
         extracted_text: scanResult.extracted_text,
         timestamp: new Date().toISOString(),
         user_id: 'anonymous'
@@ -147,7 +125,7 @@ export default function DocScanPage() {
       })
     }
 
-    // Monitor authentication state
+    
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       console.log('Auth state changed:', currentUser ? `User logged in: ${currentUser.uid}` : 'User logged out')
       setUser(currentUser)
@@ -165,8 +143,6 @@ export default function DocScanPage() {
             filename: doc.data().filename || '',
             prediction: doc.data().prediction || 'Legit',
             confidence: doc.data().confidence || 0,
-            threat_level: doc.data().threat_level,
-            risk_score: doc.data().risk_score,
             extracted_text: doc.data().extracted_text || '',
             timestamp: doc.data().timestamp,
             user_id: doc.data().user_id || ''
@@ -182,7 +158,7 @@ export default function DocScanPage() {
         return () => unsubscribeScans()
       } else {
         console.log('No user authenticated, loading local history')
-        // Load local history for non-authenticated users
+   
         loadLocalHistory()
       }
     })
@@ -228,22 +204,11 @@ export default function DocScanPage() {
       
       const data = await response.json()
       
-      // Process API response
+      // Process API response - only use what the backend actually provides
       const apiResult: DocScanResult = {
         prediction: data.prediction === 'Safe' || data.prediction === 'Legit' ? 'Legit' : 'Fake',
-        confidence: data.confidence || Math.random() * 30 + 70,
-        extracted_text: data.extracted_text || 'No text extracted',
-        threat_level: data.threat_level || (data.prediction === 'Safe' ? 'Low' : 'High'),
-        risk_score: data.risk_score || Math.floor(Math.random() * 100),
-        analysis: {
-          file_size: data.analysis?.file_size || `${(file.size / 1024).toFixed(2)} KB`,
-          file_type: data.analysis?.file_type || file.type || 'Unknown',
-          security_score: data.analysis?.security_score || Math.floor(Math.random() * 100),
-          malware_detected: data.analysis?.malware_detected || false,
-          suspicious_content: data.analysis?.suspicious_content || [],
-          text_analysis: data.analysis?.text_analysis || [],
-          metadata_risks: data.analysis?.metadata_risks || []
-        }
+        confidence: data.confidence || 0.5,
+        extracted_text: data.extracted_text || 'No text could be extracted from this document.'
       }
       
       setResult(apiResult)
@@ -257,18 +222,7 @@ export default function DocScanPage() {
       const errorResult: DocScanResult = {
         prediction: 'Fake',
         confidence: 0,
-        extracted_text: 'Error: Unable to process document',
-        threat_level: 'Unknown',
-        risk_score: 100,
-        analysis: {
-          file_size: `${(file.size / 1024).toFixed(2)} KB`,
-          file_type: file.type || 'Unknown',
-          security_score: 0,
-          malware_detected: true,
-          suspicious_content: ['Unable to analyze - treat as suspicious'],
-          text_analysis: ['Analysis failed'],
-          metadata_risks: ['Processing error']
-        }
+        extracted_text: 'Error: Unable to process document. Please try again or check your internet connection.'
       }
       setResult(errorResult)
       
@@ -385,27 +339,23 @@ export default function DocScanPage() {
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-300 max-w-xs sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto leading-relaxed px-4">
-              AI-powered document analysis with advanced threat detection for PDF and DOCX files
+              Basic document analysis using machine learning for job/internship scam detection
             </p>
 
-            {/* Status Indicators */}
+            {/* Status Indicators - Only show implemented features */}
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-6 sm:mt-8 px-4">
               <div className="flex items-center gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-cyan-400/20">
                 <Brain className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
-                <span className="text-xs sm:text-sm text-gray-300">AI Analysis</span>
+                <span className="text-xs sm:text-sm text-gray-300">ML Classification</span>
               </div>
               <div className="flex items-center gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-400/20">
                 <FileCheck className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
-                <span className="text-xs sm:text-sm text-gray-300">Content Scan</span>
-              </div>
-              <div className="flex items-center gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-purple-400/20">
-                <Activity className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 animate-pulse" />
-                <span className="text-xs sm:text-sm text-gray-300">Real-time</span>
+                <span className="text-xs sm:text-sm text-gray-300">Text Extraction</span>
               </div>
               {user && (
                 <div className="flex items-center gap-2 bg-zinc-800/30 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-green-400/20">
                   <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-                  <span className="text-xs sm:text-sm text-gray-300">Logged In</span>
+                  <span className="text-xs sm:text-sm text-gray-300">History Saved</span>
                 </div>
               )}
             </div>
@@ -425,7 +375,7 @@ export default function DocScanPage() {
                     <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
                       <Upload className="w-5 h-5 text-white" />
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">Document Security Scanner</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">Document Scam Detector</h2>
                   </div>
 
                   <div className="space-y-4">
@@ -519,7 +469,7 @@ export default function DocScanPage() {
                       <h3 className="text-xl sm:text-2xl font-bold text-white">Analysis Results</h3>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
                       {/* Threat Status */}
                       <div className={`p-4 sm:p-6 rounded-2xl border ${
                         result.prediction === 'Legit' ? 
@@ -528,13 +478,13 @@ export default function DocScanPage() {
                       }`}>
                         <div className="flex items-center gap-2 mb-2">
                           <Target className={`w-5 h-5 ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`} />
-                          <span className="font-semibold text-white">Status</span>
+                          <span className="font-semibold text-white">Classification</span>
                         </div>
                         <p className={`text-lg font-bold ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`}>
                           {result.prediction}
                         </p>
                         <p className="text-sm text-gray-300 mt-1">
-                          Threat Level: {result.threat_level || 'Low'}
+                          Document appears {result.prediction === 'Legit' ? 'legitimate' : 'suspicious'}
                         </p>
                       </div>
 
@@ -545,7 +495,7 @@ export default function DocScanPage() {
                           <span className="font-semibold text-white">Confidence</span>
                         </div>
                         <p className="text-lg font-bold text-blue-400">
-                          <strong>Confidence:</strong> {(result.confidence * 100).toFixed(2)}%
+                          {(result.confidence * 100).toFixed(1)}%
                         </p>
                         <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
                           <div 
@@ -554,107 +504,18 @@ export default function DocScanPage() {
                           ></div>
                         </div>
                       </div>
-
-                      {/* Risk Score */}
-                      <div className="p-4 sm:p-6 rounded-2xl bg-purple-500/10 border border-purple-500/30">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Shield className="w-5 h-5 text-purple-400" />
-                          <span className="font-semibold text-white">Risk Score</span>
-                        </div>
-                        <p className="text-lg font-bold text-purple-400">
-                          {result.risk_score || 0}/100
-                        </p>
-                        <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-                          <div 
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                              (result.risk_score || 0) > 70 ? 'bg-red-500' : 
-                              (result.risk_score || 0) > 40 ? 'bg-yellow-500' : 'bg-green-500'
-                            }`}
-                            style={{ width: `${result.risk_score || 0}%` }}
-                          ></div>
-                        </div>
-                      </div>
                     </div>
 
                     {/* Extracted Text */}
-                    <div className="p-4 sm:p-6 bg-zinc-900/30 rounded-2xl border border-zinc-600/30 mb-6">
+                    <div className="p-4 sm:p-6 bg-zinc-900/30 rounded-2xl border border-zinc-600/30">
                       <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                         <Eye className="w-5 h-5 text-cyan-400" />
-                        Extracted Content
+                        Extracted Text Content
                       </h4>
                       <div className="max-h-48 overflow-y-auto whitespace-pre-wrap text-sm text-gray-300 bg-black/20 p-4 rounded-xl border border-zinc-700/50">
-                        {result.extracted_text}
+                        {result.extracted_text || "No text could be extracted from this document."}
                       </div>
                     </div>
-
-                    {/* Additional Analysis */}
-                    {result.analysis && (
-                      <div className="space-y-4">
-                        {/* Basic Analysis */}
-                        <div className="p-4 sm:p-6 bg-zinc-900/30 rounded-2xl border border-zinc-600/30">
-                          <h4 className="font-semibold text-white mb-4 flex items-center gap-2">
-                            <Fingerprint className="w-5 h-5 text-purple-400" />
-                            Technical Analysis
-                          </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="text-gray-400">File Size:</span>
-                              <span className="text-white ml-2">{result.analysis.file_size}</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-400">File Type:</span>
-                              <span className="text-white ml-2">{result.analysis.file_type}</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-400">Security Score:</span>
-                              <span className="text-white ml-2">{result.analysis.security_score}/100</span>
-                            </div>
-                            <div>
-                              <span className="text-gray-400">Malware:</span>
-                              <span className={`ml-2 ${result.analysis.malware_detected ? 'text-red-400' : 'text-green-400'}`}>
-                                {result.analysis.malware_detected ? 'Detected' : 'Clean'}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Suspicious Content */}
-                        {result.analysis.suspicious_content && result.analysis.suspicious_content.length > 0 && (
-                          <div className="p-4 sm:p-6 bg-red-500/5 rounded-2xl border border-red-500/20">
-                            <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                              <AlertTriangle className="w-5 h-5 text-red-400" />
-                              Suspicious Content
-                            </h4>
-                            <div className="space-y-2">
-                              {result.analysis.suspicious_content.map((content, index) => (
-                                <div key={index} className="flex items-center gap-2 text-sm text-red-400">
-                                  <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
-                                  {content}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Text Analysis */}
-                        {result.analysis.text_analysis && result.analysis.text_analysis.length > 0 && (
-                          <div className="p-4 sm:p-6 bg-blue-500/5 rounded-2xl border border-blue-500/20">
-                            <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                              <Brain className="w-5 h-5 text-blue-400" />
-                              Content Analysis
-                            </h4>
-                            <div className="space-y-2">
-                              {result.analysis.text_analysis.map((analysis, index) => (
-                                <div key={index} className="flex items-center gap-2 text-sm text-blue-400">
-                                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                                  {analysis}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
               )}
@@ -671,7 +532,7 @@ export default function DocScanPage() {
                 </h3>
                 <div className="space-y-3">
                   <button 
-                    onClick={() => result && copyToClipboard(`File: ${file?.name}\nStatus: ${result.prediction}\nConfidence: ${result.confidence.toFixed(1)}%\nRisk Score: ${result.risk_score}/100`)}
+                    onClick={() => result && copyToClipboard(`File: ${file?.name}\nStatus: ${result.prediction}\nConfidence: ${(result.confidence * 100).toFixed(1)}%`)}
                     className="w-full bg-zinc-700/50 hover:bg-zinc-600/50 text-white rounded-xl px-4 py-3 transition-all duration-300 flex items-center gap-2 text-sm"
                   >
                     <Copy className="w-4 h-4" />
@@ -729,8 +590,6 @@ export default function DocScanPage() {
                           </div>
                           <div className="flex items-center gap-2 text-xs text-gray-500">
                             <span>Confidence: {scan.confidence.toFixed(1)}%</span>
-                            <span>•</span>
-                            <span>Risk: {scan.risk_score || 0}/100</span>
                           </div>
                         </div>
                       ))
@@ -752,8 +611,6 @@ export default function DocScanPage() {
                           </div>
                           <div className="flex items-center gap-2 text-xs text-gray-500">
                             <span>Confidence: {scan.confidence.toFixed(1)}%</span>
-                            <span>•</span>
-                            <span>Risk: {scan.risk_score || 0}/100</span>
                           </div>
                         </div>
                       ))
@@ -792,7 +649,7 @@ export default function DocScanPage() {
               <div className="bg-zinc-800/30 backdrop-blur-sm rounded-3xl p-6 border border-zinc-700/50 text-center">
                 <Heart className="w-8 h-8 text-pink-400 mx-auto mb-3 animate-pulse" />
                 <p className="text-sm text-gray-300 mb-2">Trusted by</p>
-                <p className="text-xl font-bold text-cyan-400">50+ Users</p>
+                <p className="text-xl font-bold text-cyan-400">2+ Users</p>
                 <div className="flex justify-center gap-1 mt-2">
                   {[...Array(5)].map((_, i) => (
                     <div key={i} className="w-2 h-2 bg-yellow-400 rounded-full"></div>
