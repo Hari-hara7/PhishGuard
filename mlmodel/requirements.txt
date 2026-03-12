@@ -3,6 +3,7 @@ uvicorn
 scikit-learn
 joblib
 pandas
+numpy
 python-multipart
 PyMuPDF
 python-docx

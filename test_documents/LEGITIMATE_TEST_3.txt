@@ -1,0 +1,46 @@
+RESEARCH INTERNSHIP CERTIFICATE
+
+Indian Institute of Technology, Bombay
+Powai, Mumbai - 400076
+
+CERTIFICATE OF COMPLETION
+
+This is to certify that
+
+Mr. Rahul Verma
+Student ID: 210101089
+Institution: Indian Institute of Technology, Delhi
+
+has successfully completed a Summer Research Fellowship Program at the Department of Computer Science and Engineering, IIT Bombay.
+
+Research Project Details:
+- Project Title: "Efficient Algorithms for Distributed Machine Learning"
+- Duration: May 15, 2025 to July 31, 2025 (11 weeks)
+- Supervisor: Prof. Dr. Anand Krishnamurthy
+- Research Group: Machine Learning and Data Science Laboratory
+
+Summary of Work:
+During the fellowship, Mr. Verma worked on developing optimized algorithms for federated learning in resource-constrained environments. His contributions include:
+
+1. Implementation of a novel gradient compression technique reducing communication overhead by 40%
+2. Theoretical analysis of convergence guarantees for the proposed algorithm
+3. Experimental evaluation on standard benchmark datasets
+4. Co-authoring a research paper submitted to ICML 2026
+
+Mr. Verma demonstrated excellent research aptitude, strong analytical skills, and the ability to work independently. His work has been accepted for publication in a peer-reviewed conference.
+
+We highly recommend him for future academic and research opportunities.
+
+_____________________
+Prof. Dr. Anand Krishnamurthy
+Professor, Department of CSE
+IIT Bombay
+
+_____________________
+Dr. Meera Iyer
+Dean of Student Affairs
+IIT Bombay
+
+Certificate Number: IITB/SRF/2025/CS/142
+Issue Date: August 10, 2025
+Verification: https://iitb.ac.in/certificates/verify

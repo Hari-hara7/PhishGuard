@@ -1,0 +1,34 @@
+INTERNSHIP COMPLETION CERTIFICATE
+
+This is to certify that
+
+Ms. Priya Sharma
+Roll Number: 2023CS1045
+
+has successfully completed a 3-month internship program at
+
+Tata Consultancy Services Limited
+TCS Towers, Marine Drive, Mumbai - 400001
+
+Department: Software Development
+Duration: June 1, 2025 to August 31, 2025
+Project: Enterprise Resource Planning Module Development
+
+During the internship, Ms. Sharma demonstrated excellent technical skills in Java programming, database management, and agile development methodologies. She actively participated in team meetings and contributed to the successful delivery of the project.
+
+Key Achievements:
+- Developed 3 REST API endpoints for the ERP system
+- Participated in code reviews and quality assurance processes
+- Completed all assigned tasks within project timelines
+- Received positive feedback from team lead and peers
+
+We wish her all the best in her future endeavors.
+
+_____________________
+Rajesh Kumar
+Senior Manager - HR
+Tata Consultancy Services
+Date: September 5, 2025
+
+Certificate ID: TCS/INT/2025/7834
+Verification: https://tcs.com/verify
