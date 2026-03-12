@@ -15,8 +15,39 @@ def clean_text(text):
     return text
 
 
-df = pd.read_csv("datasets/documents.csv")
+# Read the file and handle mixed CSV/TSV format
+data_rows = []
+with open("datasets/documents.csv", 'r', encoding='utf-8') as f:
+    lines = f.readlines()
+    
+for i, line in enumerate(lines):
+    line = line.strip()
+    if not line or line.startswith('text_content'):  # Skip header rows
+        continue
+    
+    # Try to parse as CSV (comma-separated, possibly quoted)
+    if line.startswith('"'):
+        # Quoted CSV format: "text content",label
+        try:
+            last_quote = line.rfind('"')
+            text = line[1:last_quote]  # Get text between quotes
+            label_part = line[last_quote+1:].strip().lstrip(',')
+            label = int(label_part)
+            data_rows.append({'text_content': text, 'label': label})
+        except:
+            pass
+    elif '\t' in line:
+        # Tab-separated format: text content<TAB>label
+        parts = line.rsplit('\t', 1)
+        if len(parts) == 2:
+            try:
+                text = parts[0].strip()
+                label = int(parts[1].strip())
+                data_rows.append({'text_content': text, 'label': label})
+            except:
+                pass
 
+df = pd.DataFrame(data_rows)
 df.dropna(inplace=True)
 
 df["cleaned"] = df["text_content"].apply(clean_text)

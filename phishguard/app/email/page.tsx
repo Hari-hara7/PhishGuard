@@ -8,30 +8,36 @@ import {
   CheckCircle,
   Loader,
   Zap,
-  Eye,
   Clock,
-  Activity,
   Lock,
-  Cpu,
   Target,
   Brain,
-  Fingerprint,
   Command,
   ArrowRight,
   Copy,
   RefreshCw,
-  Database,
   Heart,
   FileText,
-  AtSign
+  AtSign,
+  Sparkles
 } from 'lucide-react'
 import { db, auth } from '../../lib/firebase'
 import { collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp, getDocs, writeBatch } from 'firebase/firestore'
-import { onAuthStateChanged, User as FirebaseUser, signInAnonymously } from 'firebase/auth'
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+
+const GEMINI_API_KEY = 'AIzaSyDr8CZHW5I4x_z7CLsBpmBGBDoSN7lljEw';
 
 interface EmailScanResult {
   prediction: 'Fake' | 'Legit'
   confidence: number
+}
+
+// Gemini Analysis interface
+interface GeminiAnalysis {
+  verdict: string
+  riskLevel: string
+  explanation: string
+  suspiciousIndicators?: string[]
 }
 
 interface FirebaseEmailRecord {
@@ -54,6 +60,8 @@ export default function EmailScannerPage() {
   const [firebaseHistory, setFirebaseHistory] = useState<FirebaseEmailRecord[]>([])
   const [localHistory, setLocalHistory] = useState<FirebaseEmailRecord[]>([])
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [geminiAnalysis, setGeminiAnalysis] = useState<GeminiAnalysis | null>(null)
+  const [isAnalyzingWithGemini, setIsAnalyzingWithGemini] = useState(false)
 
   // Function to save scan to Firebase
   const saveToFirebase = async (textContent: string, senderDomain: string, scanResult: EmailScanResult) => {
@@ -172,6 +180,7 @@ export default function EmailScannerPage() {
     
     setLoading(true)
     setResult(null)
+    setGeminiAnalysis(null)
 
     try {
       // Try to call real API first
@@ -201,6 +210,9 @@ export default function EmailScannerPage() {
         
         // Save to Firebase if user is authenticated
         await saveToFirebase(textContent, senderDomain, apiResult)
+        
+        // Now analyze with Gemini AI for explanation
+        analyzeWithGemini(textContent, senderDomain, apiResult)
       } catch (apiError) {
         console.error('API not available:', apiError)
         throw apiError
@@ -215,8 +227,84 @@ export default function EmailScannerPage() {
       
       // Save error result to Firebase as well
       await saveToFirebase(textContent, senderDomain, errorResult)
+      
+      // Still try Gemini analysis
+      analyzeWithGemini(textContent, senderDomain, errorResult)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Analyze with Gemini AI for explanation
+  const analyzeWithGemini = async (content: string, domain: string, mlResult: EmailScanResult) => {
+    setIsAnalyzingWithGemini(true)
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Analyze this email for phishing indicators and explain the ML model's prediction.
+
+Sender Domain: ${domain}
+Email Content: ${content.substring(0, 2000)}
+ML Model Prediction: ${mlResult.prediction}
+
+Please analyze:
+1. Is the sender domain legitimate or suspicious?
+2. Are there suspicious keywords or patterns in the email?
+3. Does the email exhibit common phishing characteristics?
+
+Provide:
+1. Your verdict: PHISHING or LEGITIMATE
+2. Risk level: HIGH, MEDIUM, or LOW
+3. A detailed explanation (3-5 sentences) of why this email is ${mlResult.prediction === 'Fake' ? 'suspicious/phishing' : 'safe/legitimate'}
+4. List any suspicious indicators found
+
+Format your response as JSON:
+{
+  "verdict": "PHISHING" or "LEGITIMATE",
+  "riskLevel": "HIGH/MEDIUM/LOW",
+  "explanation": "Your detailed explanation here",
+  "suspiciousIndicators": ["indicator1", "indicator2"]
+}`
+              }]
+            }]
+          })
+        }
+      );
+
+      const data = await response.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      // Parse JSON from response
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const analysis = JSON.parse(jsonMatch[0]);
+        setGeminiAnalysis(analysis);
+      } else {
+        setGeminiAnalysis({
+          verdict: mlResult.prediction === 'Fake' ? 'PHISHING' : 'LEGITIMATE',
+          riskLevel: 'MEDIUM',
+          explanation: 'AI analysis completed but response format was unexpected. The ML model indicates this email is ' + (mlResult.prediction === 'Fake' ? 'potentially a phishing attempt.' : 'likely legitimate.'),
+          suspiciousIndicators: []
+        });
+      }
+    } catch (error) {
+      console.error('Gemini analysis error:', error);
+      setGeminiAnalysis({
+        verdict: mlResult.prediction === 'Fake' ? 'PHISHING' : 'LEGITIMATE',
+        riskLevel: 'MEDIUM',
+        explanation: 'AI analysis service temporarily unavailable. Based on ML model analysis, this email is classified as ' + mlResult.prediction + '.',
+        suspiciousIndicators: []
+      });
+    } finally {
+      setIsAnalyzingWithGemini(false);
     }
   }
 
@@ -412,7 +500,7 @@ export default function EmailScannerPage() {
                       <h3 className="text-xl sm:text-2xl font-bold text-white">Email Analysis Results</h3>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6">
                       {/* Email Status */}
                       <div className={`p-4 sm:p-6 rounded-2xl border ${
                         result.prediction === 'Legit' ? 
@@ -430,23 +518,72 @@ export default function EmailScannerPage() {
                           Email appears {result.prediction === 'Legit' ? 'legitimate' : 'suspicious'}
                         </p>
                       </div>
+                    </div>
 
-                      {/* Confidence Score */}
-                      <div className="p-4 sm:p-6 rounded-2xl bg-blue-500/10 border border-blue-500/30">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Cpu className="w-5 h-5 text-blue-400" />
-                          <span className="font-semibold text-white">Confidence</span>
-                        </div>
-                        <p className="text-lg font-bold text-blue-400">
-                          {(result.confidence * 100).toFixed(1)}%
-                        </p>
-                        <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-                          <div 
-                            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${result.confidence * 100}%` }}
-                          ></div>
-                        </div>
+                    {/* Gemini AI Analysis */}
+                    <div className="mt-6 p-4 sm:p-6 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl border border-purple-500/30">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Sparkles className="w-5 h-5 text-purple-400" />
+                        <h4 className="font-semibold text-white">AI Analysis (Powered by Gemini)</h4>
                       </div>
+                      
+                      {isAnalyzingWithGemini ? (
+                        <div className="flex items-center gap-3 text-gray-300">
+                          <Loader className="w-5 h-5 animate-spin text-purple-400" />
+                          <span>Analyzing with AI...</span>
+                        </div>
+                      ) : geminiAnalysis ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                              geminiAnalysis.verdict === 'LEGITIMATE' 
+                                ? 'bg-green-500/20 text-green-400' 
+                                : 'bg-red-500/20 text-red-400'
+                            }`}>
+                              {geminiAnalysis.verdict}
+                            </span>
+                            <span className={`px-3 py-1 rounded-full text-sm ${
+                              geminiAnalysis.riskLevel === 'LOW' 
+                                ? 'bg-green-500/20 text-green-400'
+                                : geminiAnalysis.riskLevel === 'MEDIUM'
+                                ? 'bg-yellow-500/20 text-yellow-400'
+                                : 'bg-red-500/20 text-red-400'
+                            }`}>
+                              {geminiAnalysis.riskLevel} Risk
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-300 leading-relaxed">
+                            {geminiAnalysis.explanation}
+                          </p>
+                          {geminiAnalysis.suspiciousIndicators && geminiAnalysis.suspiciousIndicators.length > 0 && (
+                            <div className="mt-3">
+                              <p className="text-sm font-medium text-orange-400 mb-2">Suspicious Indicators:</p>
+                              <ul className="list-disc list-inside text-sm text-gray-300 space-y-1">
+                                {geminiAnalysis.suspiciousIndicators.map((indicator, index) => (
+                                  <li key={index}>{indicator}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-400">
+                          AI analysis will appear here after scanning...
+                        </p>
+                      )}
+                    </div>
+
+                    {/* ML Model Info */}
+                    <div className="mt-4 p-4 sm:p-6 bg-zinc-900/30 rounded-2xl border border-zinc-600/30">
+                      <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+                        <Brain className="w-4 h-4 text-cyan-400" />
+                        ML Model Result
+                      </h4>
+                      <p className="text-sm text-gray-300">
+                        {result.prediction === 'Legit' 
+                          ? 'The ML model has classified this email as legitimate based on content and domain pattern analysis.'
+                          : 'The ML model has flagged this email as potentially malicious. It may be a phishing attempt trying to steal your information.'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -464,7 +601,7 @@ export default function EmailScannerPage() {
                 </h3>
                 <div className="space-y-3">
                   <button 
-                    onClick={() => result && copyToClipboard(`Email: ${senderDomain}\nStatus: ${result.prediction}\nConfidence: ${(result.confidence * 100).toFixed(1)}%`)}
+                    onClick={() => result && copyToClipboard(`Email Domain: ${senderDomain}\nStatus: ${result.prediction}${geminiAnalysis ? '\n\nAI Analysis: ' + geminiAnalysis.explanation : ''}`)}
                     className="w-full bg-zinc-700/50 hover:bg-zinc-600/50 text-white rounded-xl px-4 py-3 transition-all duration-300 flex items-center gap-2 text-sm"
                   >
                     <Copy className="w-4 h-4" />
@@ -506,9 +643,6 @@ export default function EmailScannerPage() {
                           }`}>
                             {scan.prediction}
                           </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <span>Confidence: {(scan.confidence * 100).toFixed(1)}%</span>
                         </div>
                       </div>
                     ))}

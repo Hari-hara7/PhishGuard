@@ -2539,5 +2539,82 @@
       "urlFilter": "skillquest.in",
       "resourceTypes": ["main_frame"]
     }
+  },
+  {
+    "id": 232,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "shikshavertex.in",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 233,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "shikshavertex.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 234,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "unloxacademy.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 235,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "unloxacademy.in",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 236,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "smartedinnovations.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 237,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "smartedinnovations.in",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 238,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "help@shikshavertex.in",
+      "resourceTypes": ["main_frame"]
+    }
   }
 ]

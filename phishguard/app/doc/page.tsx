@@ -13,7 +13,6 @@ import {
   Clock,
   FileCheck,
   Lock,
-  Cpu,
   Target,
   Brain,
   Command,
@@ -24,16 +23,26 @@ import {
   Heart,
   File,
   Download,
-  Trash2
+  Trash2,
+  Sparkles
 } from 'lucide-react'
 import { db, auth } from '../../lib/firebase'
 import { collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp, getDocs, writeBatch } from 'firebase/firestore'
 import { onAuthStateChanged, User as FirebaseUser, signInAnonymously } from 'firebase/auth'
 
+const GEMINI_API_KEY = 'AIzaSyDr8CZHW5I4x_z7CLsBpmBGBDoSN7lljEw';
+
 interface DocScanResult {
   prediction: 'Fake' | 'Legit'
   confidence: number
   extracted_text: string
+}
+
+// Gemini Analysis interface
+interface GeminiAnalysis {
+  verdict: string
+  riskLevel: string
+  explanation: string
 }
 
 interface FirebaseDocRecord {
@@ -56,6 +65,8 @@ export default function DocScanPage() {
   const [firebaseHistory, setFirebaseHistory] = useState<FirebaseDocRecord[]>([])
   const [localHistory, setLocalHistory] = useState<FirebaseDocRecord[]>([])
   const [dragActive, setDragActive] = useState(false)
+  const [geminiAnalysis, setGeminiAnalysis] = useState<GeminiAnalysis | null>(null)
+  const [isAnalyzingWithGemini, setIsAnalyzingWithGemini] = useState(false)
 
  
   const saveToFirebase = async (filename: string, scanResult: DocScanResult) => {
@@ -190,6 +201,7 @@ export default function DocScanPage() {
     
     setIsScanning(true)
     setResult(null)
+    setGeminiAnalysis(null)
 
     try {
       const formData = new FormData()
@@ -215,6 +227,9 @@ export default function DocScanPage() {
       
       // Save to Firebase if user is authenticated
       await saveToFirebase(file.name, apiResult)
+      
+      // Now analyze with Gemini AI for explanation
+      analyzeWithGemini(file.name, apiResult)
 
     } catch (err) {
       console.error('Error scanning document:', err)
@@ -230,6 +245,75 @@ export default function DocScanPage() {
       await saveToFirebase(file.name, errorResult)
     } finally {
       setIsScanning(false)
+    }
+  }
+
+  // Analyze with Gemini AI for explanation
+  const analyzeWithGemini = async (filename: string, mlResult: DocScanResult) => {
+    setIsAnalyzingWithGemini(true)
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Analyze this document for potential job/internship scam indicators and explain the ML model's prediction.
+
+Document Filename: ${filename}
+ML Model Prediction: ${mlResult.prediction}
+Extracted Text (first 2000 chars): ${mlResult.extracted_text.substring(0, 2000)}
+
+Please analyze:
+1. Does the document content look like a legitimate job offer or internship opportunity?
+2. Are there suspicious claims (guaranteed salary, work from home schemes, advance payment requests)?
+3. Does the language seem professional or does it contain red flags?
+
+Provide:
+1. Your verdict: SCAM or LEGITIMATE
+2. Risk level: HIGH, MEDIUM, or LOW
+3. A detailed explanation (3-5 sentences) of why this document is ${mlResult.prediction === 'Fake' ? 'suspicious/fraudulent' : 'legitimate'}
+
+Format your response as JSON:
+{
+  "verdict": "SCAM" or "LEGITIMATE",
+  "riskLevel": "HIGH/MEDIUM/LOW",
+  "explanation": "Your detailed explanation here"
+}`
+              }]
+            }]
+          })
+        }
+      );
+
+      const data = await response.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      // Parse JSON from response
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const analysis = JSON.parse(jsonMatch[0]);
+        setGeminiAnalysis(analysis);
+      } else {
+        setGeminiAnalysis({
+          verdict: mlResult.prediction === 'Fake' ? 'SCAM' : 'LEGITIMATE',
+          riskLevel: 'MEDIUM',
+          explanation: 'AI analysis completed but response format was unexpected. The ML model indicates this document is ' + (mlResult.prediction === 'Fake' ? 'potentially a scam.' : 'likely legitimate.')
+        });
+      }
+    } catch (error) {
+      console.error('Gemini analysis error:', error);
+      setGeminiAnalysis({
+        verdict: mlResult.prediction === 'Fake' ? 'SCAM' : 'LEGITIMATE',
+        riskLevel: 'MEDIUM',
+        explanation: 'AI analysis service temporarily unavailable. Based on ML model analysis, this document is classified as ' + mlResult.prediction + '.'
+      });
+    } finally {
+      setIsAnalyzingWithGemini(false);
     }
   }
 
@@ -469,41 +553,59 @@ export default function DocScanPage() {
                       <h3 className="text-xl sm:text-2xl font-bold text-white">Analysis Results</h3>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
-                      {/* Threat Status */}
-                      <div className={`p-4 sm:p-6 rounded-2xl border ${
-                        result.prediction === 'Legit' ? 
-                        'bg-green-500/10 border-green-500/30' : 
-                        'bg-red-500/10 border-red-500/30'
-                      }`}>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Target className={`w-5 h-5 ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`} />
-                          <span className="font-semibold text-white">Classification</span>
-                        </div>
-                        <p className={`text-lg font-bold ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`}>
-                          {result.prediction}
-                        </p>
-                        <p className="text-sm text-gray-300 mt-1">
-                          Document appears {result.prediction === 'Legit' ? 'legitimate' : 'suspicious'}
-                        </p>
+                    {/* ML Classification */}
+                    <div className={`p-4 sm:p-6 rounded-2xl border mb-6 ${
+                      result.prediction === 'Legit' ? 
+                      'bg-green-500/10 border-green-500/30' : 
+                      'bg-red-500/10 border-red-500/30'
+                    }`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className={`w-5 h-5 ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`} />
+                        <span className="font-semibold text-white">ML Classification</span>
                       </div>
+                      <p className={`text-lg font-bold ${result.prediction === 'Legit' ? 'text-green-400' : 'text-red-400'}`}>
+                        {result.prediction}
+                      </p>
+                      <p className="text-sm text-gray-300 mt-1">
+                        Document appears {result.prediction === 'Legit' ? 'legitimate' : 'suspicious'}
+                      </p>
+                    </div>
 
-                      {/* Confidence Score */}
-                      <div className="p-4 sm:p-6 rounded-2xl bg-blue-500/10 border border-blue-500/30">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Cpu className="w-5 h-5 text-blue-400" />
-                          <span className="font-semibold text-white">Confidence</span>
-                        </div>
-                        <p className="text-lg font-bold text-blue-400">
-                          {(result.confidence * 100).toFixed(1)}%
-                        </p>
-                        <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-                          <div 
-                            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${result.confidence * 100}%` }}
-                          ></div>
-                        </div>
+                    {/* Gemini AI Analysis Section */}
+                    <div className="p-4 sm:p-6 rounded-2xl bg-purple-500/10 border border-purple-500/30 mb-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Sparkles className="w-5 h-5 text-purple-400" />
+                        <span className="font-semibold text-white">Gemini AI Analysis</span>
                       </div>
+                      
+                      {isAnalyzingWithGemini ? (
+                        <div className="flex items-center gap-2 text-purple-300">
+                          <Loader className="w-4 h-4 animate-spin" />
+                          <span>Analyzing document with AI...</span>
+                        </div>
+                      ) : geminiAnalysis ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-4">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                              geminiAnalysis.verdict === 'SCAM' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'
+                            }`}>
+                              {geminiAnalysis.verdict}
+                            </span>
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                              geminiAnalysis.riskLevel === 'HIGH' ? 'bg-red-500/20 text-red-400' :
+                              geminiAnalysis.riskLevel === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400' :
+                              'bg-green-500/20 text-green-400'
+                            }`}>
+                              {geminiAnalysis.riskLevel} Risk
+                            </span>
+                          </div>
+                          <p className="text-gray-300 text-sm leading-relaxed">
+                            {geminiAnalysis.explanation}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-gray-400 text-sm">AI analysis will appear here after scan</p>
+                      )}
                     </div>
 
                     {/* Extracted Text */}
@@ -532,7 +634,7 @@ export default function DocScanPage() {
                 </h3>
                 <div className="space-y-3">
                   <button 
-                    onClick={() => result && copyToClipboard(`File: ${file?.name}\nStatus: ${result.prediction}\nConfidence: ${(result.confidence * 100).toFixed(1)}%`)}
+                    onClick={() => result && copyToClipboard(`File: ${file?.name}\nML Status: ${result.prediction}${geminiAnalysis ? `\nAI Verdict: ${geminiAnalysis.verdict}\nRisk Level: ${geminiAnalysis.riskLevel}\nExplanation: ${geminiAnalysis.explanation}` : ''}`)}
                     className="w-full bg-zinc-700/50 hover:bg-zinc-600/50 text-white rounded-xl px-4 py-3 transition-all duration-300 flex items-center gap-2 text-sm"
                   >
                     <Copy className="w-4 h-4" />
@@ -588,9 +690,6 @@ export default function DocScanPage() {
                               {scan.prediction}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-500">
-                            <span>Confidence: {scan.confidence.toFixed(1)}%</span>
-                          </div>
                         </div>
                       ))
                     ) : (
@@ -608,9 +707,6 @@ export default function DocScanPage() {
                             }`}>
                               {scan.prediction}
                             </span>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-500">
-                            <span>Confidence: {scan.confidence.toFixed(1)}%</span>
                           </div>
                         </div>
                       ))
