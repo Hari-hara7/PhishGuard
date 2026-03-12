@@ -20,7 +20,6 @@ import {
   RefreshCw,
   Database,
   AlertCircle,
-  Sparkles,
   Brain
 } from 'lucide-react'
 import axios from 'axios'
@@ -28,20 +27,11 @@ import { db, auth } from '../../lib/firebase'
 import { collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp, getDocs, writeBatch } from 'firebase/firestore'
 import { onAuthStateChanged, User as FirebaseUser, signInAnonymously } from 'firebase/auth'
 
-const GEMINI_API_KEY = 'AIzaSyDr8CZHW5I4x_z7CLsBpmBGBDoSN7lljEw';
-
 // Updated interface without risk_score and analysis fields
 interface ScanResult {
   prediction: 'Fake' | 'Legit'
   confidence: number
   threat_level?: string
-}
-
-// Gemini Analysis interface
-interface GeminiAnalysis {
-  verdict: string
-  riskLevel: string
-  explanation: string
 }
 
 // Updated Firebase record interface
@@ -66,8 +56,6 @@ export default function LinkScannerPage() {
   const [firebaseHistory, setFirebaseHistory] = useState<FirebaseLinkRecord[]>([])
   const [localHistory, setLocalHistory] = useState<FirebaseLinkRecord[]>([])
   const [error, setError] = useState<string | null>(null)
-  const [geminiAnalysis, setGeminiAnalysis] = useState<GeminiAnalysis | null>(null)
-  const [isAnalyzingWithGemini, setIsAnalyzingWithGemini] = useState(false)
 
   // Function to save scan to Firebase (simplified)
   const saveToFirebase = async (url: string, scanResult: ScanResult) => {
@@ -198,7 +186,6 @@ export default function LinkScannerPage() {
     setIsScanning(true)
     setResult(null)
     setError(null)
-    setGeminiAnalysis(null)
 
     try {
       // Try to call real API first
@@ -215,12 +202,9 @@ export default function LinkScannerPage() {
         }
         
         setResult(apiResult)
-        
+
         // Save to Firebase if user is authenticated
         await saveToFirebase(link, apiResult)
-        
-        // Now analyze with Gemini AI for explanation
-        analyzeWithGemini(link, apiResult)
       } catch (apiError) {
         console.log('API not available, using local basic analysis:', apiError)
         setError('The link analysis backend is currently unavailable. Using basic analysis instead.')
@@ -239,14 +223,11 @@ export default function LinkScannerPage() {
         }
         
         setResult(mockResult)
-        
+
         // Save to Firebase if user is authenticated
         await saveToFirebase(link, mockResult)
-        
-        // Now analyze with Gemini AI for explanation
-        analyzeWithGemini(link, mockResult)
       }
-      
+
       // Add to local scan history for backward compatibility or non-authenticated users
       if (!user) {
         const newHistory = [link, ...scanHistory.slice(0, 4)]
@@ -270,70 +251,6 @@ export default function LinkScannerPage() {
       await saveToFirebase(link, errorResult)
     } finally {
       setIsScanning(false)
-    }
-  }
-
-  // Analyze with Gemini AI for explanation
-  const analyzeWithGemini = async (url: string, mlResult: ScanResult) => {
-    setIsAnalyzingWithGemini(true)
-    try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `Analyze this URL for phishing indicators and explain the ML model's prediction.
-
-URL: ${url}
-ML Model Prediction: ${mlResult.prediction}
-Threat Level: ${mlResult.threat_level || 'Unknown'}
-
-Please provide:
-1. Your verdict: PHISHING or LEGITIMATE
-2. Risk level: HIGH, MEDIUM, or LOW
-3. A detailed explanation (3-5 sentences) of why this URL is ${mlResult.prediction === 'Fake' ? 'suspicious/malicious' : 'safe/legitimate'}. Include specific indicators you found in the URL structure, domain, or patterns.
-
-Format your response as JSON:
-{
-  "verdict": "PHISHING" or "LEGITIMATE",
-  "riskLevel": "HIGH/MEDIUM/LOW",
-  "explanation": "Your detailed explanation here"
-}`
-              }]
-            }]
-          })
-        }
-      );
-
-      const data = await response.json();
-      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
-      // Parse JSON from response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const analysis = JSON.parse(jsonMatch[0]);
-        setGeminiAnalysis(analysis);
-      } else {
-        setGeminiAnalysis({
-          verdict: mlResult.prediction === 'Fake' ? 'PHISHING' : 'LEGITIMATE',
-          riskLevel: mlResult.threat_level || 'MEDIUM',
-          explanation: 'AI analysis completed but response format was unexpected. The ML model indicates this URL is ' + (mlResult.prediction === 'Fake' ? 'potentially dangerous.' : 'likely safe.')
-        });
-      }
-    } catch (error) {
-      console.error('Gemini analysis error:', error);
-      setGeminiAnalysis({
-        verdict: mlResult.prediction === 'Fake' ? 'PHISHING' : 'LEGITIMATE',
-        riskLevel: mlResult.threat_level || 'MEDIUM',
-        explanation: 'AI analysis service temporarily unavailable. Based on ML model analysis, this URL is classified as ' + mlResult.prediction + '.'
-      });
-    } finally {
-      setIsAnalyzingWithGemini(false);
     }
   }
 
@@ -558,49 +475,6 @@ Format your response as JSON:
                       </div>
                     </div>
 
-                    {/* Gemini AI Analysis */}
-                    <div className="mt-6 p-4 sm:p-6 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl border border-purple-500/30">
-                      <div className="flex items-center gap-2 mb-4">
-                        <Sparkles className="w-5 h-5 text-purple-400" />
-                        <h4 className="font-semibold text-white">AI Analysis (Powered by Gemini)</h4>
-                      </div>
-                      
-                      {isAnalyzingWithGemini ? (
-                        <div className="flex items-center gap-3 text-gray-300">
-                          <Loader className="w-5 h-5 animate-spin text-purple-400" />
-                          <span>Analyzing with AI...</span>
-                        </div>
-                      ) : geminiAnalysis ? (
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              geminiAnalysis.verdict === 'LEGITIMATE' 
-                                ? 'bg-green-500/20 text-green-400' 
-                                : 'bg-red-500/20 text-red-400'
-                            }`}>
-                              {geminiAnalysis.verdict}
-                            </span>
-                            <span className={`px-3 py-1 rounded-full text-sm ${
-                              geminiAnalysis.riskLevel === 'LOW' 
-                                ? 'bg-green-500/20 text-green-400'
-                                : geminiAnalysis.riskLevel === 'MEDIUM'
-                                ? 'bg-yellow-500/20 text-yellow-400'
-                                : 'bg-red-500/20 text-red-400'
-                            }`}>
-                              {geminiAnalysis.riskLevel} Risk
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-300 leading-relaxed">
-                            {geminiAnalysis.explanation}
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-400">
-                          AI analysis will appear here after scanning...
-                        </p>
-                      )}
-                    </div>
-
                     {/* Basic Explanation */}
                     <div className="mt-4 p-4 sm:p-6 bg-zinc-900/30 rounded-2xl border border-zinc-600/30">
                       <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
@@ -633,7 +507,7 @@ Format your response as JSON:
                 </h3>
                 <div className="space-y-3">
                   <button 
-                    onClick={() => result && copyToClipboard(`URL: ${link}\nStatus: ${result.prediction}\nThreat Level: ${result.threat_level || 'Low'}${geminiAnalysis ? '\n\nAI Analysis: ' + geminiAnalysis.explanation : ''}`)}
+                    onClick={() => result && copyToClipboard(`URL: ${link}\nStatus: ${result.prediction}\nThreat Level: ${result.threat_level || 'Low'}`)}
                     disabled={!result}
                     className="w-full bg-zinc-700/50 hover:bg-zinc-600/50 disabled:bg-zinc-800/50 disabled:text-zinc-500 text-white rounded-xl px-4 py-3 transition-all duration-300 flex items-center gap-2 text-sm"
                   >

@@ -487,7 +487,7 @@ function setupObserver() {
 }
 
 // Initialize
-console.log('🛡️ PhishGuard: Gmail protection active - v2.1');
+console.log('🛡️ PhishGuard: Gmail protection active - v2.2');
 
 // Multiple checks on load
 setTimeout(analyzeEmailContent, 1000);
@@ -503,6 +503,7 @@ window.addEventListener('hashchange', () => {
   lastAnalyzedEmail = null;
   setTimeout(analyzeEmailContent, 500);
   setTimeout(analyzeEmailContent, 1500);
+  setTimeout(addScanButton, 1000);
 });
 
 // Periodic check every 2 seconds for first 10 seconds
@@ -516,4 +517,120 @@ const periodicCheck = setInterval(() => {
   if (!document.getElementById('phishguard-warning')) {
     analyzeEmailContent();
   }
+  addScanButton();
 }, 2000);
+
+// ========== SCAN WITH PHISHGUARD BUTTON ==========
+
+function addScanButton() {
+  // Don't add if already exists
+  if (document.getElementById('phishguard-scan-btn')) return;
+  
+  // Find the email toolbar (action buttons area)
+  const toolbar = document.querySelector('.ade') || 
+                  document.querySelector('[gh="mtb"]') ||
+                  document.querySelector('.G-atb');
+  
+  if (!toolbar) return;
+  
+  // Create scan button
+  const scanBtn = document.createElement('div');
+  scanBtn.id = 'phishguard-scan-btn';
+  scanBtn.innerHTML = `
+    <div style="
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      margin-left: 8px;
+      background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(8, 145, 178, 0.3);
+      transition: all 0.2s;
+      font-family: 'Google Sans', Roboto, sans-serif;
+    " onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 4px 12px rgba(8, 145, 178, 0.4)'"
+       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(8, 145, 178, 0.3)'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+        <path d="m9 12 2 2 4-4"></path>
+      </svg>
+      Scan with PhishGuard
+    </div>
+  `;
+  
+  toolbar.appendChild(scanBtn);
+  
+  // Add click handler
+  scanBtn.addEventListener('click', scanWithPhishGuard);
+  
+  console.log('🛡️ PhishGuard: Scan button added');
+}
+
+function scanWithPhishGuard() {
+  // Extract email data
+  const emailData = extractEmailData();
+  
+  if (!emailData.body) {
+    alert('Please open an email first to scan it with PhishGuard');
+    return;
+  }
+  
+  // Encode data for URL
+  const params = new URLSearchParams({
+    sender: emailData.sender,
+    subject: emailData.subject,
+    body: emailData.body,
+    autoScan: 'true'
+  });
+  
+  // Open PhishGuard Email Scanner with data
+  const scannerUrl = `http://localhost:3000/email?${params.toString()}`;
+  window.open(scannerUrl, '_blank');
+  
+  console.log('🛡️ PhishGuard: Opening scanner with email data');
+}
+
+function extractEmailData() {
+  const data = {
+    sender: '',
+    subject: '',
+    body: ''
+  };
+  
+  // Get sender
+  const senderSelectors = ['span[email]', '.gD[email]', '.go[email]', '.g2'];
+  for (const selector of senderSelectors) {
+    const el = document.querySelector(selector);
+    if (el) {
+      data.sender = el.getAttribute('email') || el.innerText || '';
+      if (data.sender.includes('@')) break;
+    }
+  }
+  
+  // Get subject
+  const subjectEl = document.querySelector('h2.hP') || 
+                    document.querySelector('[data-thread-perm-id]') ||
+                    document.querySelector('.ha h2');
+  if (subjectEl) {
+    data.subject = subjectEl.innerText || '';
+  }
+  
+  // Get body
+  const bodyEl = document.querySelector('.a3s.aiL') || 
+                 document.querySelector('.ii.gt') ||
+                 document.querySelector('[data-message-id]');
+  if (bodyEl) {
+    data.body = bodyEl.innerText || '';
+  }
+  
+  return data;
+}
+
+// Add scan button on load
+setTimeout(addScanButton, 2000);
+setTimeout(addScanButton, 4000);
+
