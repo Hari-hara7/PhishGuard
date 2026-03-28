@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: phishguard-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile   # relative to repo root set below
+    dockerContext: .               # build context = mlmodel/
+    region: singapore              # closest to India
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
+    autoDeploy: true               # redeploy on every git push
