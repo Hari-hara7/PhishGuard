@@ -6,44 +6,44 @@ const SUSPICIOUS_KEYWORDS = [
   // Payment related
   'pay', 'payment', 'fee', 'processing fee', '₹', 'rupees', 'training fee',
   'training fee is applicable', 'mentor charges', 'fee scholarship',
-  
+
   // Urgency tactics
   'urgent', 'immediately', 'asap', 'final call', 'last chance', 'final window',
   'final batch', 'limited seats', 'seats are filling', 'apply before registrations close',
   'no further extensions', 'closing soon', 'deadline alert',
-  
+
   // Action requests
   'click here', 'click the link', 'verify now', 'confirm now', 'apply now',
   'fill out the form asap', 'complete your enrollment', 'enrollment process',
-  
+
   // Selection claims
   'congratulations', 'you have won', 'selected', 'shortlisted',
   'shortlisted for', 'pleased to inform you', 'been shortlisted',
-  
+
   // Document requests
   'aadhaar', 'pan card', 'bank details', 'account number',
   'send documents', 'share your', 'id proof',
-  
+
   // Too good to be true
   'guaranteed', '100% placement', 'placement guarantee', 'lifetime job assistance',
   'stipend upto', 'stipend up to', 'free tablet', 'co-branded certificate',
-  
+
   // Fake program names
   'job bridge program', 'digital bridge program', 'edulet tablet', 'smart edulet',
   'blu ai', 'smart labs', 'prepfree platform',
-  
+
   // Fake organizations
   'unlox academy', 'shikshavertex', 'shiksha vertex', 'smarted innovations',
   'skill vertex', 'skillvertex',
-  
+
   // Fake collaboration claims
   'powered by ibm', 'ibm powered', 'ibm training', 'microsoft internship',
   'in collaboration with meity', 'nasscom', 'aicte approved', 'vtu approved',
-  
+
   // Campus scam patterns
   'campus outreach campaign', 'scholarship campaign', 'campus engagement team',
   'scholarship code', 'use code', 'avail discount',
-  
+
   // Generic internship scam
   'certificate', 'internship opportunity', 'exclusive opportunity',
   'specially designed for', 'mandatory internship'
@@ -54,7 +54,7 @@ const SUSPICIOUS_DOMAINS = [
   // Known scam domains from user reports
   'shikshavertex.in', 'unloxacademy.com', 'smartedinnovations.com',
   'skillvertex.com', 'edusera.org', 'edulyt.in',
-  
+
   // Fake internship sites (already blocked)
   'systemtron.in', 'codsoft.in', 'oasisinfobyte.com', 'bharatintern.live',
   'internpe.in', 'letsintern.in', 'vaultofcodes.com', 'theinternbuddy.com',
@@ -65,7 +65,7 @@ const SUSPICIOUS_DOMAINS = [
   'codealpha.tech', 'mainflow.in', 'interncareerhub.com',
   'interncareerpath.tech', 'codersdata.in', 'upskillintern.in',
   'codeclause.com', 'technohacks.in', 'thecodex.in',
-  
+
   // Generic suspicious domains
   'internmail.cc', 'careers-meta.org', 'hr-google.com', 'careerupdate.online',
   'urgent-offer.net', 'jobs-securelink.co', 'intern-portal.org', 'verify-now.info',
@@ -134,14 +134,14 @@ function analyzeEmailContent() {
     return;
   }
   console.log('🛡️ PhishGuard: Analyzing email...');
-  
+
   // Get email content - try multiple selectors
   const emailBody = document.querySelector('.a3s.aiL') ||
-                    document.querySelector('[data-message-id]') ||
-                    document.querySelector('.ii.gt') ||
-                    document.querySelector('[role="listitem"]') ||
-                    document.querySelector('[role="main"]');
-  
+    document.querySelector('[data-message-id]') ||
+    document.querySelector('.ii.gt') ||
+    document.querySelector('[role="listitem"]') ||
+    document.querySelector('[role="main"]');
+
   if (!emailBody) {
     console.log('🛡️ PhishGuard: No email body found');
     return;
@@ -169,12 +169,13 @@ function analyzeEmailContent() {
   // The open email's header lives inside elements like .ha, .hP parent, .nH
   // Try scoped querySelectorAll inside the email thread container first
   const emailThread = document.querySelector('.ha') ||
-                      document.querySelector('.adn.ads') ||
-                      document.querySelector('[data-message-id]');
+    document.querySelector('.adn.ads') ||
+    document.querySelector('[data-message-id]');
 
   // Attributes that Gmail uses for the actual email address
   const attrCandidates = ['email', 'data-hovercard-id'];
-  const scopedSelectors = ['span[email]', '.gD[email]', '.go[email]', '[data-hovercard-id*="@"]'];
+  // Prioritize .gD which is the true sender header element in Gmail!
+  const scopedSelectors = ['.gD[email]', 'h3 span[email]', 'span[email]', '.go[email]', '[data-hovercard-id*="@"]'];
 
   outer:
   for (const sel of scopedSelectors) {
@@ -195,8 +196,8 @@ function analyzeEmailContent() {
   // Fallback: regex-scan the header text
   if (!senderEmail) {
     const headerEl = document.querySelector('.ha') ||
-                     document.querySelector('.gE.iv.gt') ||
-                     document.querySelector('.hP')?.closest('.ha');
+      document.querySelector('.gE.iv.gt') ||
+      document.querySelector('.hP')?.closest('.ha');
     if (headerEl) {
       const m = headerEl.innerText.match(/[\w.+%-]+@[\w.-]+\.[a-z]{2,}/i);
       if (m) {
@@ -206,15 +207,27 @@ function analyzeEmailContent() {
     }
   }
 
-  console.log('🛡️ PhishGuard: Sender:', senderEmail, 'Domain:', senderDomain);
+  // Clean up sender email (sometimes it includes < > brackets)
+  if (senderEmail) {
+    senderEmail = senderEmail.replace(/[<>]/g, '').trim();
+    senderDomain = senderEmail.split('@')[1] || '';
+  }
 
-  // ── Whitelist check — NMAMIT / NITTE trusted domains ───────────────
-  // Never show a banner for emails from these legitimate college domains
+  console.log('🛡️ PhishGuard: Extracted Sender:', `"${senderEmail}"`, 'Domain:', `"${senderDomain}"`);
+
+  // ── Whitelist check — NMAMIT / NITTE trusted domains & emails ───────────────
+  // Emails from these legitimate college domains and specific emails will NOT show a warning banner
+  // This prevents legitimate institutional emails from triggering false alarms
   const ALWAYS_SAFE_DOMAINS = ['nmamit.in', 'nitte.edu.in'];
-  if (senderDomain && ALWAYS_SAFE_DOMAINS.some(d => senderDomain.endsWith(d))) {
-    console.log('🛡️ PhishGuard: Trusted college domain, skipping analysis:', senderDomain);
+  const ALWAYS_SAFE_EMAILS = ['placement@nmamit.in']; // Explicitly safe sender
+
+  const isFromCollegeDomain = senderDomain && ALWAYS_SAFE_DOMAINS.some(d => senderDomain.toLowerCase().endsWith(d.toLowerCase()));
+  const isSafeEmail = senderEmail && ALWAYS_SAFE_EMAILS.some(e => senderEmail.toLowerCase().includes(e.toLowerCase()));
+
+  if (isFromCollegeDomain || isSafeEmail) {
+    console.log('🛡️ PhishGuard: Email from legitimate college source - SUPPRESSING BANNER:', senderEmail || senderDomain);
     removeWarningBanner();
-    return;
+    return; // Skip all analysis and banner for college domains/emails
   }
 
   // Analyze for phishing indicators
@@ -245,9 +258,9 @@ function analyzeEmailContent() {
   });
 
   // Check for personal Gmail sending corporate-style internship emails
-  if (senderDomain === 'gmail.com' && 
-      (emailText.includes('internship') || emailText.includes('shortlisted') || 
-       emailText.includes('enrollment') || emailText.includes('program'))) {
+  if (senderDomain === 'gmail.com' &&
+    (emailText.includes('internship') || emailText.includes('shortlisted') ||
+      emailText.includes('enrollment') || emailText.includes('program'))) {
     analysis.isPersonalGmailScam = true;
     analysis.riskScore += 35;
     analysis.reasons.push('Personal Gmail sending internship offers (common scam pattern)');
@@ -260,13 +273,13 @@ function analyzeEmailContent() {
       analysis.riskScore += 50;
       analysis.reasons.push(`Known scam domain: ${senderDomain}`);
     }
-    
+
     // Check for shikshavertex pattern (name_name@shikshavertex.in)
     if (senderDomain.includes('shikshavertex') || senderDomain.includes('skillvertex')) {
       analysis.riskScore += 60;
       analysis.reasons.push('ShikshaVertex/SkillVertex scam domain detected');
     }
-    
+
     if (LEGITIMATE_DOMAINS.some(d => senderDomain.endsWith(d))) {
       analysis.isLegitimate = true;
       analysis.riskScore = Math.max(0, analysis.riskScore - 30);
@@ -274,16 +287,16 @@ function analyzeEmailContent() {
   }
 
   // Check for payment requests with internship context
-  if ((emailText.includes('fee') || emailText.includes('payment') || emailText.includes('charges')) && 
-      (emailText.includes('internship') || emailText.includes('training') || emailText.includes('program'))) {
+  if ((emailText.includes('fee') || emailText.includes('payment') || emailText.includes('charges')) &&
+    (emailText.includes('internship') || emailText.includes('training') || emailText.includes('program'))) {
     analysis.riskScore += 45;
     analysis.reasons.push('Requires payment for internship (legitimate internships are FREE)');
   }
 
   // Check for urgency tactics
-  if (emailText.includes('urgent') || emailText.includes('immediately') || 
-      emailText.includes('final call') || emailText.includes('final batch') ||
-      emailText.includes('limited seats') || emailText.includes('last chance')) {
+  if (emailText.includes('urgent') || emailText.includes('immediately') ||
+    emailText.includes('final call') || emailText.includes('final batch') ||
+    emailText.includes('limited seats') || emailText.includes('last chance')) {
     analysis.riskScore += 25;
     analysis.reasons.push('Uses aggressive urgency tactics');
   }
@@ -296,7 +309,7 @@ function analyzeEmailContent() {
 
   // Check for fake collaboration claims
   if ((emailText.includes('meity') || emailText.includes('nasscom') || emailText.includes('aicte')) &&
-      (emailText.includes('internship') || emailText.includes('training'))) {
+    (emailText.includes('internship') || emailText.includes('training'))) {
     analysis.riskScore += 30;
     analysis.reasons.push('Claims fake govt/industry collaboration');
   }
@@ -354,11 +367,11 @@ function showPhishingWarning(analysis, senderEmail) {
   // ── Severity tiers ───────────────────────────────────────────────────
   let scamType = 'Suspicious Email';
   let severityLabel = 'Caution';
-  let accentColor  = '#f59e0b';   // amber
-  let barColor     = 'linear-gradient(90deg, #f59e0b, #ef4444)';
-  let headerBg     = 'linear-gradient(135deg, #1e1035 0%, #2d1a5e 100%)';
-  let bodyBg       = '#110d22';
-  let borderCol    = 'rgba(139,92,246,0.4)';
+  let accentColor = '#f59e0b';   // amber
+  let barColor = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+  let headerBg = 'linear-gradient(135deg, #1e1035 0%, #2d1a5e 100%)';
+  let bodyBg = '#110d22';
+  let borderCol = 'rgba(139,92,246,0.4)';
 
   if (analysis.reasons.some(r => r.includes('internship') || r.includes('ShikshaVertex') || r.includes('scam pattern'))) {
     scamType = 'Fake Internship Scam';
@@ -368,18 +381,18 @@ function showPhishingWarning(analysis, senderEmail) {
 
   if (analysis.riskScore >= 70) {
     severityLabel = 'High Risk';
-    accentColor   = '#f87171';
-    barColor      = 'linear-gradient(90deg, #ef4444, #dc2626)';
-    headerBg      = 'linear-gradient(135deg, #1a0a0a 0%, #3b0c0c 100%)';
-    bodyBg        = '#130808';
-    borderCol     = 'rgba(239,68,68,0.5)';
+    accentColor = '#f87171';
+    barColor = 'linear-gradient(90deg, #ef4444, #dc2626)';
+    headerBg = 'linear-gradient(135deg, #1a0a0a 0%, #3b0c0c 100%)';
+    bodyBg = '#130808';
+    borderCol = 'rgba(239,68,68,0.5)';
   } else if (analysis.riskScore >= 50) {
     severityLabel = 'High Risk';
-    accentColor   = '#fb923c';
-    barColor      = 'linear-gradient(90deg, #f97316, #ef4444)';
-    headerBg      = 'linear-gradient(135deg, #1a0f00 0%, #431407 100%)';
-    bodyBg        = '#130b04';
-    borderCol     = 'rgba(249,115,22,0.45)';
+    accentColor = '#fb923c';
+    barColor = 'linear-gradient(90deg, #f97316, #ef4444)';
+    headerBg = 'linear-gradient(135deg, #1a0f00 0%, #431407 100%)';
+    bodyBg = '#130b04';
+    borderCol = 'rgba(249,115,22,0.45)';
   }
 
   const topReasons = analysis.reasons.slice(0, 4);
@@ -677,14 +690,14 @@ function addScanButton() {
   if (!isInsideEmailView()) return;
   // Don't add if already exists
   if (document.getElementById('phishguard-scan-btn')) return;
-  
+
   // Find the email toolbar (action buttons area)
-  const toolbar = document.querySelector('.ade') || 
-                  document.querySelector('[gh="mtb"]') ||
-                  document.querySelector('.G-atb');
-  
+  const toolbar = document.querySelector('.ade') ||
+    document.querySelector('[gh="mtb"]') ||
+    document.querySelector('.G-atb');
+
   if (!toolbar) return;
-  
+
   // Create scan button
   const scanBtn = document.createElement('div');
   scanBtn.id = 'phishguard-scan-btn';
@@ -713,24 +726,24 @@ function addScanButton() {
       Scan with PhishGuard
     </div>
   `;
-  
+
   toolbar.appendChild(scanBtn);
-  
+
   // Add click handler
   scanBtn.addEventListener('click', scanWithPhishGuard);
-  
+
   console.log('🛡️ PhishGuard: Scan button added');
 }
 
 function scanWithPhishGuard() {
   // Extract email data
   const emailData = extractEmailData();
-  
+
   if (!emailData.body) {
     alert('Please open an email first to scan it with PhishGuard');
     return;
   }
-  
+
   // Encode data for URL
   const params = new URLSearchParams({
     sender: emailData.sender,
@@ -738,11 +751,11 @@ function scanWithPhishGuard() {
     body: emailData.body,
     autoScan: 'true'
   });
-  
+
   // Open PhishGuard Email Scanner with data
   const scannerUrl = `http://localhost:3000/email?${params.toString()}`;
   window.open(scannerUrl, '_blank');
-  
+
   console.log('🛡️ PhishGuard: Opening scanner with email data');
 }
 
@@ -752,7 +765,7 @@ function extractEmailData() {
     subject: '',
     body: ''
   };
-  
+
   // Get sender
   const senderSelectors = ['span[email]', '.gD[email]', '.go[email]', '.g2'];
   for (const selector of senderSelectors) {
@@ -762,23 +775,23 @@ function extractEmailData() {
       if (data.sender.includes('@')) break;
     }
   }
-  
+
   // Get subject
-  const subjectEl = document.querySelector('h2.hP') || 
-                    document.querySelector('[data-thread-perm-id]') ||
-                    document.querySelector('.ha h2');
+  const subjectEl = document.querySelector('h2.hP') ||
+    document.querySelector('[data-thread-perm-id]') ||
+    document.querySelector('.ha h2');
   if (subjectEl) {
     data.subject = subjectEl.innerText || '';
   }
-  
+
   // Get body
-  const bodyEl = document.querySelector('.a3s.aiL') || 
-                 document.querySelector('.ii.gt') ||
-                 document.querySelector('[data-message-id]');
+  const bodyEl = document.querySelector('.a3s.aiL') ||
+    document.querySelector('.ii.gt') ||
+    document.querySelector('[data-message-id]');
   if (bodyEl) {
     data.body = bodyEl.innerText || '';
   }
-  
+
   return data;
 }
 
